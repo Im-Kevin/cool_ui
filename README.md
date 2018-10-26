@@ -2,8 +2,14 @@
 
 一套很酷的UI控件
 
-## Getting Started
+Usage
+Add this to your package's pubspec.yaml file:
+``` yaml
+dependencies:
+  cool_ui: "^0.1.6"
+```
 
-For help getting started with Flutter, view our online [documentation](https://flutter.io/).
+## CupertinoPopover
+仿iOS的UIPopover
 
-For help on editing package code, view the [documentation](https://flutter.io/developing-packages/).
+  
