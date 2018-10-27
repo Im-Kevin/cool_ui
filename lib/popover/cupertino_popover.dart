@@ -99,22 +99,20 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
   static const double _arrowWidth = 26.0;
   static const double _arrowHeight = 13.0;
 
+  double left;
+  double top;
   Rect _arrowRect;
   Rect _bodyRect;
-  Rect _currentArrowRect;
-  Rect _currentBodyRect;
-  double _currentRadius;
   Animation<double> doubleAnimation;
   AnimationController animation;
 
   /// 是否箭头向上
-  bool get isArrowUp{
-    return ScreenUtil.screenHeight > widget.attachRect.bottom + widget.height + _arrowWidth;
-  }
+  bool isArrowUp;
 
   @override
   void initState() {
     // TODO: implement initState
+    isArrowUp = ScreenUtil.screenHeight > widget.attachRect.bottom + widget.height + _arrowWidth;
     super.initState();
     calcRect();
     animation = new AnimationController(
@@ -123,34 +121,39 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
     );
     // Tween({T begin, T end })：创建tween（补间）
     doubleAnimation = new Tween<double>(begin: 0.0, end: 1.0).animate(animation)..addListener((){
-      setState(calcAnimationRect);
+      setState((){});
     });
     animation.forward(from: 0.0);
   }
 
   @override
   Widget build(BuildContext context) {
-    var left = _bodyRect.left;
-    var top = isArrowUp?_arrowRect.top:_bodyRect.top;
+
+    var bodyMiddleX  = _bodyRect.left + _bodyRect.width / 2; // 计算Body的X轴中间点
+    var arrowMiddleX = _arrowRect.left + _arrowRect.width /2; //计算箭头的X轴中间点
+    var leftOffset = (arrowMiddleX - bodyMiddleX) * (1 - doubleAnimation.value); //计算X轴缩小的偏移值
     return Stack(
         children: <Widget>[
           Positioned(
-            left:left,
+            left:left + leftOffset,
             top:top,
-            child: ClipPath(
-              clipper:ArrowCliper(
-                  arrowRect: _currentArrowRect,
-                  bodyRect: _currentBodyRect,
-                  isArrowUp: isArrowUp,
-                  radius: _currentRadius
-              ),
-              child: Container(
-                  padding: EdgeInsets.only(top:isArrowUp?_arrowHeight:0.0),
-                  color: Colors.white,
-                  width: widget.width,
-                  height: _bodyRect.height + _arrowHeight,
-                  child: Material(child: widget.child)
-              ),
+            child:ScaleTransition(
+              alignment: isArrowUp?Alignment.topCenter:Alignment.bottomCenter,
+              scale: doubleAnimation,
+              child: ClipPath(
+                clipper:ArrowCliper(
+                    arrowRect:_arrowRect,
+                    bodyRect: _bodyRect,
+                    isArrowUp: isArrowUp,
+                    radius: widget.radius
+                ),
+                child: Container(
+                    padding: EdgeInsets.only(top:isArrowUp?_arrowHeight:0.0),
+                    color: Colors.white,
+                    width: widget.width,
+                    height: _bodyRect.height + _arrowHeight,
+                    child: Material(child: widget.child)
+                ),),
             ),
           )
         ]
@@ -179,37 +182,11 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
       arrowTop = widget.attachRect.top - _arrowHeight;
       bodyTop = widget.attachRect.top - widget.height - _arrowHeight;
     }
-    _arrowRect = Rect.fromLTWH(arrowLeft, arrowTop, _arrowWidth, _arrowHeight);
-    _bodyRect = Rect.fromLTWH(bodyLeft, bodyTop, widget.width, widget.height);
-  }
 
-  calcAnimationRect(){
-    var top = isArrowUp?_arrowRect.top:_bodyRect.top;
-
-    var middleX = (_arrowRect.left - _bodyRect.left) + _arrowRect.width /2;
-    var arrowLeft = middleX + ((_arrowRect.left - _bodyRect.left) - middleX) *  doubleAnimation.value;
-    var arrowTop = _arrowRect.top - top;
-    var bodyLeft = middleX + (0 - middleX) *  doubleAnimation.value;
-    _currentRadius = widget.radius * doubleAnimation.value;
-    var bodyTop = _bodyRect.top - top;
-
-    if(isArrowUp){
-      bodyTop = arrowTop +  _arrowRect.height * doubleAnimation.value ;
-    }else{
-      arrowTop += _arrowRect.height *(1 - doubleAnimation.value) ;
-      bodyTop = arrowTop -  _bodyRect.height * doubleAnimation.value ;
-    }
-
-    _currentArrowRect = Rect.fromLTWH(
-        arrowLeft,
-        arrowTop,
-        _arrowRect.width *   doubleAnimation.value,
-        _arrowRect.height  * doubleAnimation.value);
-    _currentBodyRect = Rect.fromLTWH(
-        bodyLeft,
-        bodyTop,
-        _bodyRect.width *   doubleAnimation.value,
-        _bodyRect.height *   doubleAnimation.value);
+    left = bodyLeft;
+    top = isArrowUp?arrowTop:bodyTop;
+    _arrowRect = Rect.fromLTWH(arrowLeft - left, arrowTop - top, _arrowWidth, _arrowHeight);
+    _bodyRect = Rect.fromLTWH(0.0, bodyTop - top, widget.width, widget.height);
   }
 }
 
