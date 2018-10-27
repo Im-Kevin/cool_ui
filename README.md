@@ -1,4 +1,4 @@
-# cool_ui
+# cool_ui [![pub package](https://img.shields.io/pub/v/cool_ui.svg)](https://pub.dartlang.org/packages/cool_ui)
 
 用flutter实现一些我认为好看的UI控件,有觉得好看的UI控件可以提出来,我会考虑实现,
 
@@ -35,5 +35,4 @@ CupertinoPopoverButton(
         ),
         popoverWidth: 100.0,
         popoverHeight: 100.0);
-  }
 ```
