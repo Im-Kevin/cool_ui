@@ -3,6 +3,7 @@ part of cool_ui;
 class CupertinoPopoverButton extends StatelessWidget{
   final Widget child;
   final Widget popoverBody;
+  final WidgetBuilder popoverBuild;
   final double popoverWidth;
   final double popoverHeight;
   final Color popoverColor;
@@ -10,12 +11,15 @@ class CupertinoPopoverButton extends StatelessWidget{
   final Duration transitionDuration;
   const CupertinoPopoverButton({
     @required this.child,
-    @required this.popoverBody,
+    this.popoverBody,
+    this.popoverBuild,
     this.popoverColor=Colors.white,
     @required this.popoverWidth,
     @required this.popoverHeight,
     this.transitionDuration=const Duration(milliseconds: 200),
-    this.radius=13.0});
+    this.radius=8.0}):
+        assert(popoverBody != null || popoverBuild != null),
+        assert(!(popoverBody != null && popoverBuild != null));
 
 
   @override
@@ -24,26 +28,16 @@ class CupertinoPopoverButton extends StatelessWidget{
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: (){
+        var offset = WidgetUtils.getWidgetLocalToGlobal(context);
+        var bounds = WidgetUtils.getWidgetBounds(context);
+        var body = popoverBody;
         showGeneralDialog(
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
             final ThemeData theme = Theme.of(context, shadowThemeOnly: true);
-            var offset = WidgetUtils.getWidgetLocalToGlobal(context);
-            var bounds = WidgetUtils.getWidgetBounds(context);
-            final Widget pageChild =  CupertinoPopover(
-              transitionDuration: transitionDuration,
-              attachRect:Rect.fromLTWH(offset.dx, offset.dy, bounds.width, bounds.height),
-              child: popoverBody,
-              width: popoverWidth,
-              height: popoverHeight,
-              color: popoverColor,
-              context: context,
-              radius: radius,);
             return Builder(
                 builder: (BuildContext context) {
-                  return theme != null
-                      ? Theme(data: theme, child: pageChild)
-                      : pageChild;
+                  return Container();
                 }
             );
 
@@ -52,18 +46,28 @@ class CupertinoPopoverButton extends StatelessWidget{
           barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
           barrierColor: Colors.black54,
           transitionDuration: transitionDuration,
-          transitionBuilder: _buildMaterialDialogTransitions,);
+          transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+            if(body == null){
+              body = popoverBuild(context);
+            }
+            return FadeTransition(
+              opacity: CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOut,
+              ),
+              child: CupertinoPopover(
+                attachRect:Rect.fromLTWH(offset.dx, offset.dy, bounds.width, bounds.height),
+                child: body,
+                width: popoverWidth,
+                height: popoverHeight,
+                color: popoverColor,
+                context: context,
+                radius: radius,
+                doubleAnimation: animation,
+              ),
+            );
+          },);
       },
-      child: child,
-    );
-  }
-
-  Widget _buildMaterialDialogTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-    return FadeTransition(
-      opacity: CurvedAnimation(
-        parent: animation,
-        curve: Curves.easeOut,
-      ),
       child: child,
     );
   }
@@ -77,7 +81,7 @@ class CupertinoPopover extends StatefulWidget {
   final double height;
   final Color color;
   final double radius;
-  final Duration transitionDuration;
+  final Animation<double> doubleAnimation;
 
   CupertinoPopover({
     @required this.attachRect,
@@ -85,9 +89,9 @@ class CupertinoPopover extends StatefulWidget {
     @required this.width,
     @required this.height,
     this.color=Colors.white,
-    this.transitionDuration = const Duration(milliseconds: 150),
     @required BuildContext context,
-    this.radius=13.0}):super(){
+    this.doubleAnimation,
+    this.radius=8.0}):super(){
     ScreenUtil.getInstance().init(context);
   }
 
@@ -96,15 +100,15 @@ class CupertinoPopover extends StatefulWidget {
 }
 
 class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProviderStateMixin{
-  static const double _arrowWidth = 26.0;
-  static const double _arrowHeight = 13.0;
+  static const double _arrowWidth = 12.0;
+  static const double _arrowHeight = 8.0;
 
   double left;
   double top;
   Rect _arrowRect;
   Rect _bodyRect;
-  Animation<double> doubleAnimation;
-  AnimationController animation;
+
+//  AnimationController animation;
 
   /// 是否箭头向上
   bool isArrowUp;
@@ -115,15 +119,15 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
     isArrowUp = ScreenUtil.screenHeight > widget.attachRect.bottom + widget.height + _arrowWidth;
     super.initState();
     calcRect();
-    animation = new AnimationController(
-        duration: widget.transitionDuration,
-        vsync: this
-    );
-    // Tween({T begin, T end })：创建tween（补间）
-    doubleAnimation = new Tween<double>(begin: 0.0, end: 1.0).animate(animation)..addListener((){
-      setState((){});
-    });
-    animation.forward(from: 0.0);
+//    animation = new AnimationController(
+//        duration: widget.transitionDuration,
+//        vsync: this
+//    );
+//    // Tween({T begin, T end })：创建tween（补间）
+//    doubleAnimation = new Tween<double>(begin: 0.0, end: 1.0).animate(animation)..addListener((){
+//      setState((){});
+//    });
+//    animation.forward(from: 0.0);
   }
 
   @override
@@ -131,7 +135,7 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
 
     var bodyMiddleX  = _bodyRect.left + _bodyRect.width / 2; // 计算Body的X轴中间点
     var arrowMiddleX = _arrowRect.left + _arrowRect.width /2; //计算箭头的X轴中间点
-    var leftOffset = (arrowMiddleX - bodyMiddleX) * (1 - doubleAnimation.value); //计算X轴缩小的偏移值
+    var leftOffset = (arrowMiddleX - bodyMiddleX) * (1 - widget.doubleAnimation.value); //计算X轴缩小的偏移值
     return Stack(
         children: <Widget>[
           Positioned(
@@ -139,7 +143,7 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
             top:top,
             child:ScaleTransition(
               alignment: isArrowUp?Alignment.topCenter:Alignment.bottomCenter,
-              scale: doubleAnimation,
+              scale: widget.doubleAnimation,
               child: ClipPath(
                 clipper:ArrowCliper(
                     arrowRect:_arrowRect,

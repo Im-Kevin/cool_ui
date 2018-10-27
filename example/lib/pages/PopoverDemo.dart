@@ -1,7 +1,7 @@
-import 'package:cool_ui_example/cool_u_i_example_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cool_ui/cool_ui.dart';
+
 
 class PopoverDemo extends StatefulWidget{
   @override
@@ -49,25 +49,30 @@ class PopoverDemoState extends State<PopoverDemo>{
   }
 
   Widget _buildPopoverButton(String btnTitle,String bodyMessage){
-    return CupertinoPopoverButton(
-        child: Container(
-          margin: EdgeInsets.all(20.0),
-          width: 80.0,
-          height: 40.0,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              boxShadow: [BoxShadow(color: Colors.black12,blurRadius: 5.0)]
-          ),
-          child: Center(child:Text(btnTitle)),
-        ),
-        popoverBody:Container(
-//                    color: Colors.lightBlue,
-          width: 100.0,
-          height: 100.0,
-          child: Text(bodyMessage),
-        ),
-        popoverWidth: 100.0,
-        popoverHeight: 100.0);
+    return Padding(
+        padding:  EdgeInsets.all(20.0),
+        child:CupertinoPopoverButton(
+            child: Container(
+              width: 80.0,
+              height: 40.0,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  boxShadow: [BoxShadow(color: Colors.black12,blurRadius: 5.0)]
+              ),
+              child: Center(child:Text(btnTitle)),
+            ),
+            popoverBuild: (context) {
+              return CupertinoPopoverMenuList(
+                children: <Widget>[
+                  CupertinoPopoverMenuItem(leading: Icon(Icons.add),child: Text("新增"),),
+                  CupertinoPopoverMenuItem(leading: Icon(Icons.edit),child: Text("修改"),),
+                  CupertinoPopoverMenuItem(leading: Icon(Icons.delete),child: Text("删除"),)
+                ],
+              );
+            },
+            popoverWidth: 150.0,
+            popoverHeight: 123.0)
+    );
   }
 }

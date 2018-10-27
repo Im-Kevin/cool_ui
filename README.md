@@ -6,7 +6,7 @@ Usage
 Add this to your package's pubspec.yaml file:
 ``` yaml
 dependencies:
-  cool_ui: "^0.0.8"
+  cool_ui: "^0.0.9"
 ```
 
 ## CupertinoPopover
@@ -35,4 +35,17 @@ CupertinoPopoverButton(
         ),
         popoverWidth: 100.0,
         popoverHeight: 100.0);
+```
+## CupertinoPopoverMenuList,CupertinoPopoverMenuItem
+用于快速搭建一个弹出的菜单项
+
+#### 案例核心代码
+```dart
+    CupertinoPopoverMenuList(
+                    children: <Widget>[
+                      CupertinoPopoverMenuItem(leading: Icon(Icons.add),child: Text("新增"),),
+                      CupertinoPopoverMenuItem(leading: Icon(Icons.edit),child: Text("修改"),),
+                      CupertinoPopoverMenuItem(leading: Icon(Icons.delete),child: Text("删除"),)
+                    ],
+                  )
 ```

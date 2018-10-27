@@ -2,6 +2,8 @@
 
 * TODO: Describe initial release.
 
-## [0.0.9] - TODO: 修改了CupertionPopover动画
+## [0.0.9] - TODO: 添加了一些控件,改进了CupertionPopover
 
-* TODO: 修改了修改了CupertionPopover动画,添加了CupertinoPopoverMenuItem控件
+* TODO: 添加了CupertinoPopoverMenuList
+* TODO: 添加了CupertinoPopoverMenuItem
+* TODO: 修改了CupertionPopover动画,
