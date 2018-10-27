@@ -1,6 +1,6 @@
 # cool_ui
 
-一套很酷的UI控件
+用flutter实现一些我认为好看的UI控件,有觉得好看的UI控件可以提出来,我会考虑实现,
 
 Usage
 Add this to your package's pubspec.yaml file:
