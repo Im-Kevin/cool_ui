@@ -6,7 +6,7 @@ Usage
 Add this to your package's pubspec.yaml file:
 ``` yaml
 dependencies:
-  cool_ui: "^0.0.7"
+  cool_ui: "^0.0.8"
 ```
 
 ## CupertinoPopover
