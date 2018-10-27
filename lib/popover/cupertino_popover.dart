@@ -31,13 +31,14 @@ class CupertinoPopoverButton extends StatelessWidget{
             var offset = WidgetUtils.getWidgetLocalToGlobal(context);
             var bounds = WidgetUtils.getWidgetBounds(context);
             final Widget pageChild =  CupertinoPopover(
-                transitionDuration: transitionDuration,
-                attachRect:Rect.fromLTWH(offset.dx, offset.dy, bounds.width, bounds.height),
-                child: popoverBody,
-                width: popoverWidth,
-                height: popoverHeight,
-                color: popoverColor,
-                radius: radius,);
+              transitionDuration: transitionDuration,
+              attachRect:Rect.fromLTWH(offset.dx, offset.dy, bounds.width, bounds.height),
+              child: popoverBody,
+              width: popoverWidth,
+              height: popoverHeight,
+              color: popoverColor,
+              context: context,
+              radius: radius,);
             return Builder(
                 builder: (BuildContext context) {
                   return theme != null
@@ -78,14 +79,17 @@ class CupertinoPopover extends StatefulWidget {
   final double radius;
   final Duration transitionDuration;
 
-  const CupertinoPopover({
+  CupertinoPopover({
     @required this.attachRect,
     @required this.child,
     @required this.width,
     @required this.height,
     this.color=Colors.white,
     this.transitionDuration = const Duration(milliseconds: 150),
-    this.radius=13.0});
+    @required BuildContext context,
+    this.radius=13.0}):super(){
+    ScreenUtil.getInstance().init(context);
+  }
 
   @override
   CupertinoPopoverState createState() => new CupertinoPopoverState();
@@ -141,11 +145,11 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
                   radius: _currentRadius
               ),
               child: Container(
-//                padding: EdgeInsets.only(top:isArrowUp?_arrowHeight:0),
-                color: Colors.white,
-                width: widget.width,
-                height: _bodyRect.height + _arrowHeight,
-                child: widget.child
+                  padding: EdgeInsets.only(top:isArrowUp?_arrowHeight:0.0),
+                  color: Colors.white,
+                  width: widget.width,
+                  height: _bodyRect.height + _arrowHeight,
+                  child: Material(child: widget.child)
               ),
             ),
           )
@@ -230,31 +234,31 @@ class ArrowCliper extends CustomClipper<Path>{
 
       path.lineTo(bodyRect.right - radius,bodyRect.top); //右上角
       path.conicTo(bodyRect.right,bodyRect.top
-          ,bodyRect.right,bodyRect.top + radius,1);
+          ,bodyRect.right,bodyRect.top + radius,1.0);
 
       path.lineTo(bodyRect.right,bodyRect.bottom - radius);  //右下角
       path.conicTo(bodyRect.right,bodyRect.bottom
-          ,bodyRect.right -radius ,bodyRect.bottom,1);
+          ,bodyRect.right -radius ,bodyRect.bottom,1.0);
 
 
       path.lineTo(bodyRect.left + radius, bodyRect.bottom); //左下角
       path.conicTo(bodyRect.left,bodyRect.bottom
-          ,bodyRect.left ,bodyRect.bottom - radius,1);
+          ,bodyRect.left ,bodyRect.bottom - radius,1.0);
 
       path.lineTo(bodyRect.left, bodyRect.top + radius); //左上角
       path.conicTo(bodyRect.left,bodyRect.top
-          ,bodyRect.left + radius,bodyRect.top,1);
+          ,bodyRect.left + radius,bodyRect.top,1.0);
     }else{
 
       path.moveTo(bodyRect.left + radius,bodyRect.top);
 
       path.lineTo(bodyRect.right - radius,bodyRect.top); //右上角
       path.conicTo(bodyRect.right,bodyRect.top
-          ,bodyRect.right,bodyRect.top + radius,1);
+          ,bodyRect.right,bodyRect.top + radius,1.0);
 
       path.lineTo(bodyRect.right,bodyRect.bottom - radius);  //右下角
       path.conicTo(bodyRect.right,bodyRect.bottom
-          ,bodyRect.right -radius ,bodyRect.bottom,1);
+          ,bodyRect.right -radius ,bodyRect.bottom,1.0);
 
       path.lineTo(arrowRect.right, arrowRect.top); //箭头
       path.lineTo(arrowRect.left + arrowRect.width / 2, arrowRect.bottom);
@@ -262,11 +266,11 @@ class ArrowCliper extends CustomClipper<Path>{
 
       path.lineTo(bodyRect.left + radius, bodyRect.bottom); //左下角
       path.conicTo(bodyRect.left,bodyRect.bottom
-          ,bodyRect.left ,bodyRect.bottom - radius,1);
+          ,bodyRect.left ,bodyRect.bottom - radius,1.0);
 
       path.lineTo(bodyRect.left, bodyRect.top + radius); //左上角
       path.conicTo(bodyRect.left,bodyRect.top
-          ,bodyRect.left + radius,bodyRect.top,1);
+          ,bodyRect.left + radius,bodyRect.top,1.0);
 
     }
     path.close();
