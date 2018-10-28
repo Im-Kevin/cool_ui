@@ -11,6 +11,10 @@ class CupertinoPopoverButton extends StatelessWidget{
   final Duration transitionDuration;
   const CupertinoPopoverButton({
     @required this.child,
+
+    @Deprecated(
+        '建议不要直接使用popoverBody,而是使用popoverBuild.'
+    )
     this.popoverBody,
     this.popoverBuild,
     this.popoverColor=Colors.white,
@@ -34,7 +38,6 @@ class CupertinoPopoverButton extends StatelessWidget{
         showGeneralDialog(
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
-            final ThemeData theme = Theme.of(context, shadowThemeOnly: true);
             return Builder(
                 builder: (BuildContext context) {
                   return Container();
@@ -169,16 +172,17 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
     double arrowTop = 0.0;
     double bodyTop = 0.0;
     double bodyLeft = 0.0;
-    if(widget.attachRect.left > widget.width / 2 &&  ScreenUtil.screenWidth - widget.attachRect.right > widget.width / 2){ //判断是否可以在中间
-      arrowLeft = widget.attachRect.left + widget.attachRect.width / 2  - _arrowWidth / 2;
+    arrowLeft = widget.attachRect.left +  widget.attachRect.width / 2 - _arrowWidth / 2;
+    if(widget.attachRect.left > widget.width / 2 &&
+        ScreenUtil.screenWidth - widget.attachRect.right > widget.width / 2){ //判断是否可以在中间
+
       bodyLeft = widget.attachRect.left +  widget.attachRect.width / 2 - widget.width / 2;
     }else if(widget.attachRect.left < widget.width / 2){ //靠左
       bodyLeft = 10.0;
-      arrowLeft = bodyLeft + widget.radius;
     }else{ //靠右
       bodyLeft = ScreenUtil.screenWidth - 10.0 - widget.width;
-      arrowLeft = ScreenUtil.screenWidth - 10.0  - _arrowWidth - 5 - widget.radius;
     }
+
     if(isArrowUp){
       arrowTop = widget.attachRect.bottom;
       bodyTop = arrowTop + _arrowHeight;
