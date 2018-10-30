@@ -21,7 +21,7 @@ class PaintEventDemoState extends State<PaintEventDemo>{
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
-          title: Text("Popover Demo"),
+          title: Text("PaintEvent Demo"),
         ),
         body: Row(
           children: <Widget>[
