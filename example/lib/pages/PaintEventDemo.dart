@@ -3,48 +3,51 @@ import 'package:flutter/cupertino.dart';
 import 'package:cool_ui/cool_ui.dart';
 
 
-class PopoverDemo extends StatefulWidget{
+class PaintEventDemo extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return PopoverDemoState();
+    return PaintEventDemoState();
   }
 
 }
 
-class PopoverDemoState extends State<PopoverDemo>{
+class PaintEventDemoState extends State<PaintEventDemo>{
+  bool isPaintBackgroud = false;
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Popover Demo"),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              _buildPopoverButton("左上角","左上角内容"),
-              _buildPopoverButton("右上角","右上角内容")
-            ],
-          ),
-          Center(
-              child:_buildPopoverButton("中间","中间内容")
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              _buildPopoverButton("左下角","左下角内容"),
-              _buildPopoverButton("右下角","右下角内容")
-            ],
-          )
-        ],
-      ),
+        appBar: AppBar(
+          title: Text("Popover Demo"),
+        ),
+        body: Row(
+          children: <Widget>[
+            FlatButton(onPressed: (){
+              setState((){
+                isPaintBackgroud = !isPaintBackgroud;
+              });
+            }, child: Text(isPaintBackgroud?"渲染前填充颜色":"渲染后填充颜色")),
+            PaintEvent(
+              child: Text("子Widget文字"),
+              paintAfter: (context,offset,size){
+                if(!isPaintBackgroud){
+                  final Paint paint = Paint();
+                  paint.color = Colors.red;
+                  context.canvas.drawRect(offset&size, paint);
+                }
+              },paintBefore: (context,offset,size){
+              if(isPaintBackgroud){
+                final Paint paint = Paint();
+                paint.color = Colors.red;
+                context.canvas.drawRect(offset&size, paint);
+              }
+            },
+            )
+          ],
+        )
     );
   }
 

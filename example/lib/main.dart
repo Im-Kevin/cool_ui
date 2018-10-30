@@ -1,4 +1,5 @@
 import 'package:cool_ui_example/cool_u_i_example_icons.dart';
+import 'package:cool_ui_example/pages/PaintEventDemo.dart';
 import 'package:cool_ui_example/pages/PopoverDemo.dart';
 import 'package:flutter/material.dart';
 
@@ -79,6 +80,12 @@ class _MyHomePageState extends State<MyHomePage> {
             title: Text("Popover"),
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PopoverDemo()));
+            },
+          ),
+          ListTile(
+            title: Text("PaintEvent"),
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PaintEventDemo()));
             },
           )
         ],
