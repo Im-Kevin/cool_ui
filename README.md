@@ -11,7 +11,7 @@ dependencies:
 
 # 控件
 
-- [CupertinoPopover](#CupertinoPopover)
+- [CupertinoPopoverButton](#CupertinoPopoverButton)
 - [CupertinoPopoverMenuList](#CupertinoPopoverMenuList)
 - [CupertinoPopoverMenuItem](#CupertinoPopoverMenuItem)
 - [showWeuiToast](#showWeuiToast)
@@ -20,7 +20,7 @@ dependencies:
 
 
 ## CupertinoPopoverButton
-仿iOS的UIPopover效果
+仿iOS的UIPopover效果的
 
 用于弹窗的按钮
 ```dart
