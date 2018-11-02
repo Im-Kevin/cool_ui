@@ -120,7 +120,7 @@ class WeuiToast extends TransitionRoute{
 
 Future showWeuiSuccessToast({
   @required BuildContext context,
-  @required Widget message=const Text("成功"),
+  Widget message=const Text("成功"),
   RouteTransitionsBuilder transitionBuilder,
   Duration closeDuration = const Duration(seconds: 3)
 }){
