@@ -1,3 +1,8 @@
+## [0.1.1] - TODO:添加了WeuiToast效果,完善了文档信息
+* TODO: 添加了WeuiToast效果
+* TODO: 完善了文档信息
+* TODO: 添加了PaintEvent事件,具体请看Demo
+
 ## [0.1.0] - TODO: 改进了CupertionPopover和添加了CupertinoPopoverMenuItem
 
 * TODO: 改进了CupertionPopover箭头的位置

@@ -1,6 +1,7 @@
 import 'package:cool_ui_example/cool_u_i_example_icons.dart';
-import 'package:cool_ui_example/pages/PaintEventDemo.dart';
-import 'package:cool_ui_example/pages/PopoverDemo.dart';
+import 'package:cool_ui_example/pages/paint_event_demo.dart';
+import 'package:cool_ui_example/pages/popover_demo.dart';
+import 'package:cool_ui_example/pages/weui_toast_demo.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -86,6 +87,12 @@ class _MyHomePageState extends State<MyHomePage> {
             title: Text("PaintEvent"),
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PaintEventDemo()));
+            },
+          ),
+          ListTile(
+            title: Text("WeuiToastEvent"),
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>WeuiToastDemo()));
             },
           )
         ],

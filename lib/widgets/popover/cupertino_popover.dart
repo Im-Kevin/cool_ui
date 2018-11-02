@@ -32,8 +32,8 @@ class CupertinoPopoverButton extends StatelessWidget{
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: (){
-        var offset = WidgetUtils.getWidgetLocalToGlobal(context);
-        var bounds = WidgetUtils.getWidgetBounds(context);
+        var offset = WidgetUtil.getWidgetLocalToGlobal(context);
+        var bounds = WidgetUtil.getWidgetBounds(context);
         var body = popoverBody;
         showGeneralDialog(
           context: context,
