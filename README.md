@@ -96,7 +96,7 @@ const CupertinoPopoverMenuItem({
   });
 ```
 | Param | Type |  Description |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | [leading] | <code>Widget<Widget></code>  | 菜单左边,一般放图标 |
 | [child] | <code>Widget<Widget></code>  | 菜单内容 |
 | [onTap] | <code>VoidCallback<Widget></code>   |菜单点击事件 |
