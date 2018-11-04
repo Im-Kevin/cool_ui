@@ -6,7 +6,7 @@ Usage
 Add this to your package's pubspec.yaml file:
 ``` yaml
 dependencies:
-  cool_ui: "^0.1.1"
+  cool_ui: "^0.1.4"
 ```
 
 # 控件
@@ -30,6 +30,7 @@ CupertinoPopoverButton({
     this.popoverColor=Colors.white,
     @required this.popoverWidth,
     @required this.popoverHeight,
+    this.onTap,
     this.transitionDuration=const Duration(milliseconds: 200),
     this.radius=8.0});
 ```
@@ -41,6 +42,7 @@ CupertinoPopoverButton({
 | popoverBuild | <code>WidgetBuilder</code> |  | 生成弹出框的内容 |
 | popoverWidth | <code>double</code> |  | 弹出框的宽度 |
 | popoverHeight | <code>double</code> |  | 弹出框的高度 |
+| [onTap] | <code>BoolCallback</code> |  | 按钮点击事件,返回true取消默认反应(不打开Popover) |
 | [popoverColor] | <code>Color</code> | 白色 | 弹出框的背景颜色 |
 | [transitionDuration] | <code>Duration</code> | 0.2s  | 过度动画时间 |
 | [radius] | <code>double</code> |  8.0 | 弹出框的圆角弧度 |
@@ -99,7 +101,7 @@ const CupertinoPopoverMenuItem({
 | --- | --- | --- |
 | [leading] | <code>Widget<Widget></code>  | 菜单左边,一般放图标 |
 | [child] | <code>Widget<Widget></code>  | 菜单内容 |
-| [onTap] | <code>VoidCallback<Widget></code>   |菜单点击事件 |
+| [onTap] | <code>BoolCallback</code> |  | 按钮点击事件,返回true取消默认反应(不关闭Popover) |
 | [isTapClosePopover] | <code>bool<Widget></code>  | 是否点击关闭 |
 
 #### 案例核心代码

@@ -1,5 +1,6 @@
 part of cool_ui;
 
+typedef BoolCallback = bool Function();
 class CupertinoPopoverButton extends StatelessWidget{
   final Widget child;
   final Widget popoverBody;
@@ -9,9 +10,9 @@ class CupertinoPopoverButton extends StatelessWidget{
   final Color popoverColor;
   final double radius;
   final Duration transitionDuration;
+  final BoolCallback onTap;
   const CupertinoPopoverButton({
     @required this.child,
-
     @Deprecated(
         '建议不要直接使用popoverBody,而是使用popoverBuild.'
     )
@@ -20,6 +21,7 @@ class CupertinoPopoverButton extends StatelessWidget{
     this.popoverColor=Colors.white,
     @required this.popoverWidth,
     @required this.popoverHeight,
+    this.onTap,
     this.transitionDuration=const Duration(milliseconds: 200),
     this.radius=8.0}):
         assert(popoverBody != null || popoverBuild != null),
@@ -32,6 +34,9 @@ class CupertinoPopoverButton extends StatelessWidget{
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: (){
+        if(onTap != null && onTap()){
+          return;
+        }
         var offset = WidgetUtil.getWidgetLocalToGlobal(context);
         var bounds = WidgetUtil.getWidgetBounds(context);
         var body = popoverBody;
@@ -122,15 +127,6 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
     isArrowUp = ScreenUtil.screenHeight > widget.attachRect.bottom + widget.height + _arrowWidth;
     super.initState();
     calcRect();
-//    animation = new AnimationController(
-//        duration: widget.transitionDuration,
-//        vsync: this
-//    );
-//    // Tween({T begin, T end })：创建tween（补间）
-//    doubleAnimation = new Tween<double>(begin: 0.0, end: 1.0).animate(animation)..addListener((){
-//      setState((){});
-//    });
-//    animation.forward(from: 0.0);
   }
 
   @override

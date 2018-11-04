@@ -27,7 +27,7 @@ class CupertinoPopoverMenuList extends StatelessWidget{
 class CupertinoPopoverMenuItem extends StatefulWidget{
   final Widget leading;
   final Widget child;
-  final VoidCallback onTap;
+  final BoolCallback onTap;
   final bool isTapClosePopover;
 
   const CupertinoPopoverMenuItem({
@@ -73,8 +73,8 @@ class CupertinoPopoverMenuItemState extends State<CupertinoPopoverMenuItem>{
           setState(() {
             isDown = false;
           });
-          if(widget.onTap != null){
-            widget.onTap();
+          if(widget.onTap != null && widget.onTap()){
+            return;
           }
           if(widget.isTapClosePopover){
             Navigator.of(context).pop();
