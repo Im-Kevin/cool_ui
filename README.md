@@ -1,6 +1,7 @@
 # cool_ui [![pub package](https://img.shields.io/pub/v/cool_ui.svg)](https://pub.dartlang.org/packages/cool_ui)
 
-用flutter实现一些我认为好看的UI控件,有觉得好看的UI控件可以提出来,我会考虑实现,
+用flutter实现一些我认为好看的UI控件</br>
+希望大家提一些觉得不错的控件,我自己一个人想有时候想到的比较有限
 
 Usage
 Add this to your package's pubspec.yaml file:
