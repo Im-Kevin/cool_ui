@@ -1,3 +1,6 @@
+## [0.1.5] - TODO:添加了popoverConstraints参数
+* TODO: CupertionPopoverButton添加了CupertionPopoverButton参数,用于设置最大最小宽度,取消必填的高宽
+
 ## [0.1.4] - TODO:修改了onTap事件
 * TODO: CupertionPopoverButton添加了onTap事件,返回True不打开Popover
 * TODO: CupertinoPopoverMenuItem修改了onTap事件,返回True不关闭Popover

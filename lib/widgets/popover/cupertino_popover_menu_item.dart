@@ -8,16 +8,18 @@ class CupertinoPopoverMenuList extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: children.length * 2 - 1,
-      itemBuilder: (context,int i){
-        if(i.isOdd){
-          // 在每一列之前，添加一个1像素高的分隔线widget
-          return const Divider(height: 1.0,);
-        }
-        final int index=i ~/2;
-        return children[index];
-      },
-      padding: EdgeInsets.all(0.0),
+          itemCount: children.length * 2 - 1,
+          shrinkWrap: true,
+          itemBuilder: (context,int i){
+            if(i.isOdd){
+              // 在每一列之前，添加一个1像素高的分隔线widget
+              return const Divider(height: 1.0,);
+            }
+            final int index=i ~/2;
+            return children[index];
+          },
+          padding: EdgeInsets.all(0.0),
+
     );
   }
 

@@ -11,7 +11,9 @@ class CupertinoPopoverButton extends StatelessWidget{
   final double radius;
   final Duration transitionDuration;
   final BoolCallback onTap;
-  const CupertinoPopoverButton({
+  final BoxConstraints popoverConstraints;
+
+  CupertinoPopoverButton({
     @required this.child,
     @Deprecated(
         '建议不要直接使用popoverBody,而是使用popoverBuild.'
@@ -19,14 +21,20 @@ class CupertinoPopoverButton extends StatelessWidget{
     this.popoverBody,
     this.popoverBuild,
     this.popoverColor=Colors.white,
-    @required this.popoverWidth,
-    @required this.popoverHeight,
+    this.popoverWidth,
+    this.popoverHeight,
+    BoxConstraints popoverConstraints,
     this.onTap,
     this.transitionDuration=const Duration(milliseconds: 200),
     this.radius=8.0}):
         assert(popoverBody != null || popoverBuild != null),
-        assert(!(popoverBody != null && popoverBuild != null));
+        assert(!(popoverBody != null && popoverBuild != null)),
+        this.popoverConstraints =
+        (popoverWidth != null || popoverHeight != null)
 
+            ? popoverConstraints?.tighten(width: popoverWidth, height: popoverHeight)
+            ?? BoxConstraints.tightFor(width: popoverWidth, height: popoverHeight)
+            : popoverConstraints;
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +74,7 @@ class CupertinoPopoverButton extends StatelessWidget{
               child: CupertinoPopover(
                 attachRect:Rect.fromLTWH(offset.dx, offset.dy, bounds.width, bounds.height),
                 child: body,
-                width: popoverWidth,
-                height: popoverHeight,
+                constraints:popoverConstraints,
                 color: popoverColor,
                 context: context,
                 radius: radius,
@@ -81,40 +88,53 @@ class CupertinoPopoverButton extends StatelessWidget{
   }
 }
 
-
 class CupertinoPopover extends StatefulWidget {
   final Rect attachRect;
   final Widget child;
-  final double width;
-  final double height;
   final Color color;
   final double radius;
   final Animation<double> doubleAnimation;
+  BoxConstraints constraints;
 
   CupertinoPopover({
     @required this.attachRect,
     @required this.child,
-    @required this.width,
-    @required this.height,
+    BoxConstraints constraints,
     this.color=Colors.white,
     @required BuildContext context,
     this.doubleAnimation,
     this.radius=8.0}):super(){
     ScreenUtil.getInstance().init(context);
+    BoxConstraints temp =  null;
+    if(constraints != null){
+      temp = BoxConstraints(maxHeight:123.0,maxWidth:150.0).copyWith(
+        minWidth: constraints.minWidth.isFinite?constraints.minWidth:null,
+        minHeight: constraints.minHeight.isFinite?constraints.minHeight:null,
+        maxWidth: constraints.maxWidth.isFinite?constraints.maxWidth:null,
+        maxHeight: constraints.maxHeight.isFinite?constraints.maxHeight:null,
+      );
+    }else{
+      temp=BoxConstraints(maxHeight:123.0,maxWidth:150.0);
+    }
+    this.constraints = temp.copyWith(maxHeight: temp.maxHeight + CupertinoPopoverState._arrowHeight);
   }
 
   @override
   CupertinoPopoverState createState() => new CupertinoPopoverState();
+
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<BoxConstraints>('constraints', constraints, showName: false));
+    properties.add(DiagnosticsProperty<Color>('color', color, showName: false));
+    properties.add(DiagnosticsProperty<double>('double', radius, showName: false));
+  }
 }
 
 class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProviderStateMixin{
   static const double _arrowWidth = 12.0;
   static const double _arrowHeight = 8.0;
-
-  double left;
-  double top;
-  Rect _arrowRect;
-  Rect _bodyRect;
 
 //  AnimationController animation;
 
@@ -123,87 +143,251 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
 
   @override
   void initState() {
-    // TODO: implement initState
-    isArrowUp = ScreenUtil.screenHeight > widget.attachRect.bottom + widget.height + _arrowWidth;
     super.initState();
-    calcRect();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    var bodyMiddleX  = _bodyRect.left + _bodyRect.width / 2; // 计算Body的X轴中间点
-    var arrowMiddleX = _arrowRect.left + _arrowRect.width /2; //计算箭头的X轴中间点
-    var leftOffset = (arrowMiddleX - bodyMiddleX) * (1 - widget.doubleAnimation.value); //计算X轴缩小的偏移值
     return Stack(
-        children: <Widget>[
-          Positioned(
-            left:left + leftOffset,
-            top:top,
-            child:ScaleTransition(
-              alignment: isArrowUp?Alignment.topCenter:Alignment.bottomCenter,
-              scale: widget.doubleAnimation,
-              child: ClipPath(
-                clipper:ArrowCliper(
-                    arrowRect:_arrowRect,
-                    bodyRect: _bodyRect,
-                    isArrowUp: isArrowUp,
-                    radius: widget.radius
-                ),
-                child: Container(
-                    padding: EdgeInsets.only(top:isArrowUp?_arrowHeight:0.0),
-                    color: Colors.white,
-                    width: widget.width,
-                    height: _bodyRect.height + _arrowHeight,
-                    child: Material(child: widget.child)
-                ),),
-            ),
-          )
-        ]
+      children: <Widget>[
+        _CupertionPopoverPosition(
+          attachRect: widget.attachRect,
+          scale: widget.doubleAnimation,
+          constraints: widget.constraints,
+          child: _CupertionPopoverContext(
+            attachRect: widget.attachRect,
+            scale: widget.doubleAnimation,
+            radius: widget.radius,
+            color: widget.color,
+            child: Material(child: widget.child),
+          ),
+        )
+      ],
     );
   }
 
-  calcRect(){
-    double arrowLeft = 0.0;
-    double arrowTop = 0.0;
-    double bodyTop = 0.0;
-    double bodyLeft = 0.0;
-    arrowLeft = widget.attachRect.left +  widget.attachRect.width / 2 - _arrowWidth / 2;
-    if(widget.attachRect.left > widget.width / 2 &&
-        ScreenUtil.screenWidth - widget.attachRect.right > widget.width / 2){ //判断是否可以在中间
-
-      bodyLeft = widget.attachRect.left +  widget.attachRect.width / 2 - widget.width / 2;
-    }else if(widget.attachRect.left < widget.width / 2){ //靠左
-      bodyLeft = 10.0;
-    }else{ //靠右
-      bodyLeft = ScreenUtil.screenWidth - 10.0 - widget.width;
-    }
-
-    if(isArrowUp){
-      arrowTop = widget.attachRect.bottom;
-      bodyTop = arrowTop + _arrowHeight;
-    }else{
-      arrowTop = widget.attachRect.top - _arrowHeight;
-      bodyTop = widget.attachRect.top - widget.height - _arrowHeight;
-    }
-
-    left = bodyLeft;
-    top = isArrowUp?arrowTop:bodyTop;
-    _arrowRect = Rect.fromLTWH(arrowLeft - left, arrowTop - top, _arrowWidth, _arrowHeight);
-    _bodyRect = Rect.fromLTWH(0.0, bodyTop - top, widget.width, widget.height);
-  }
 }
 
 
-class ArrowCliper extends CustomClipper<Path>{
-  final bool isArrowUp;
-  final Rect arrowRect;
-  final Rect bodyRect;
-  final double radius;
-  const ArrowCliper({this.isArrowUp,this.arrowRect,this.bodyRect,this.radius = 13.0});
+class _CupertionPopoverPosition extends SingleChildRenderObjectWidget{
+  final Rect attachRect;
+  final Animation<double> scale;
+  final BoxConstraints constraints;
+
+  _CupertionPopoverPosition({Widget child,this.attachRect,this.constraints,this.scale}):super(child:child);
 
   @override
-  Path getClip(Size size) {
+  RenderObject createRenderObject(BuildContext context) =>_CupertionPopoverPositionRenderObject(
+      attachRect:attachRect,
+      constraints:constraints);
+
+
+  @override
+  void updateRenderObject(BuildContext context, _CupertionPopoverPositionRenderObject renderObject) {
+    renderObject
+      ..attachRect = attachRect
+      ..additionalConstraints = constraints;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<BoxConstraints>('constraints', constraints, showName: false));
+  }
+
+}
+
+class _CupertionPopoverPositionRenderObject extends RenderShiftedBox{
+  Rect get attachRect => _attachRect;
+  Rect _attachRect;
+  set attachRect(Rect value) {
+    if (_attachRect == value)
+      return;
+    _attachRect = value;
+    markNeedsLayout();
+  }
+
+
+
+  BoxConstraints get additionalConstraints => _additionalConstraints;
+  BoxConstraints _additionalConstraints;
+  set additionalConstraints(BoxConstraints value) {
+    if (_additionalConstraints == value)
+      return;
+    _additionalConstraints = value;
+    markNeedsLayout();
+  }
+
+
+  _CupertionPopoverPositionRenderObject({RenderBox child,Rect attachRect,Color color,BoxConstraints constraints,Animation<double> scale}) : super(child){
+    this._attachRect = attachRect;
+    this._additionalConstraints = constraints;
+  }
+
+
+  @override
+  void performLayout() {
+    child.layout(_additionalConstraints.enforce(constraints), parentUsesSize: true);
+    size = Size(constraints.maxWidth,constraints.maxHeight);
+
+    final BoxParentData childParentData = child.parentData;
+
+    childParentData.offset = calcOffset(child.size);
+  }
+
+  Offset calcOffset(Size size){
+    double bodyLeft = 0.0;
+
+    var isArrowUp = ScreenUtil.screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
+
+    if(attachRect.left > size.width / 2 &&
+        ScreenUtil.screenWidth - attachRect.right > size.width / 2){ //判断是否可以在中间
+      bodyLeft = attachRect.left +  attachRect.width / 2 - size.width / 2;
+    }else if(attachRect.left < size.width / 2){ //靠左
+      bodyLeft = 10.0;
+    }else{ //靠右
+      bodyLeft = ScreenUtil.screenWidth - 10.0 - size.width;
+    }
+
+    if(isArrowUp){
+      return Offset(bodyLeft,attachRect.bottom);
+    }else{
+      return Offset(bodyLeft,attachRect.top - size.height - CupertinoPopoverState._arrowHeight);
+    }
+  }
+
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty<BoxConstraints>('additionalConstraints', additionalConstraints));
+  }
+}
+
+class _CupertionPopoverContext extends SingleChildRenderObjectWidget{
+  final Rect attachRect;
+  final Color color;
+  final Animation<double> scale;
+  final double radius;
+  _CupertionPopoverContext({Widget child,this.attachRect,this.color,this.scale,this.radius}):super(child:child);
+
+  @override
+  RenderObject createRenderObject(BuildContext context) => _CupertionPopoverContextRenderObject(
+      attachRect: attachRect,
+      color: color,
+      scale: scale,
+      radius: radius
+  );
+
+
+  @override
+  void updateRenderObject(BuildContext context, _CupertionPopoverContextRenderObject renderObject) {
+    renderObject
+      ..attachRect = attachRect
+      ..color = color
+      ..scale = scale
+      ..radius = radius;
+  }
+
+}
+
+class _CupertionPopoverContextRenderObject extends RenderShiftedBox{
+  Rect get attachRect => _attachRect;
+  Rect _attachRect;
+  set attachRect(Rect value) {
+    if (_attachRect == value)
+      return;
+    _attachRect = value;
+    markNeedsLayout();
+  }
+
+
+  Color get color => _color;
+  Color _color;
+  set color(Color value) {
+    if (_color == value)
+      return;
+    _color = value;
+    markNeedsLayout();
+  }
+
+
+  Animation<double> get scale => _scale;
+  Animation<double> _scale;
+  set scale(Animation<double> value) {
+    if (_scale == value)
+      return;
+    _scale = value;
+    markNeedsLayout();
+  }
+
+
+  double get radius => _radius;
+  double _radius;
+  set radius(double value) {
+    if (_radius == value)
+      return;
+    _radius = value;
+    markNeedsLayout();
+  }
+
+
+  _CupertionPopoverContextRenderObject({RenderBox child,Rect attachRect,Color color,Animation<double> scale,double radius}) : super(child){
+    this._attachRect = attachRect;
+    this._color = color;
+    this._scale = scale;
+    this._radius = radius;
+  }
+
+
+  @override
+  void performLayout() {
+    assert(constraints.maxHeight.isFinite);
+    BoxConstraints childConstraints = BoxConstraints(maxHeight: constraints.maxHeight - CupertinoPopoverState._arrowHeight).enforce(constraints);
+
+    child.layout(childConstraints, parentUsesSize: true);
+    size = Size(child.size.width,child.size.height + CupertinoPopoverState._arrowHeight);
+    final BoxParentData childParentData = child.parentData;
+    var isArrowUp = ScreenUtil.screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
+    if(isArrowUp)
+    {
+      childParentData.offset = Offset(0.0, CupertinoPopoverState._arrowHeight);
+    }
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    // TODO: implement paint
+    Matrix4 transform = Matrix4.identity();
+//
+    var isArrowUp = ScreenUtil.screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
+
+    var arrowLeft =attachRect.left + attachRect.width / 2 - CupertinoPopoverState._arrowWidth / 2 - offset.dx;
+    var translation = Offset(arrowLeft + CupertinoPopoverState._arrowWidth / 2,isArrowUp?0.0:size.height);
+    transform.translate(translation.dx, translation.dy);
+    transform.scale(scale.value, scale.value, 1.0);
+    transform.translate(-translation.dx, -translation.dy);
+    Rect arrowRect = Rect.fromLTWH(
+        arrowLeft,
+        isArrowUp?0.0:child.size.height,
+        CupertinoPopoverState._arrowWidth,
+        CupertinoPopoverState._arrowHeight);
+    Rect bodyRect = Offset(0.0, isArrowUp?CupertinoPopoverState._arrowHeight:0.0) & child.size;
+
+    context.pushClipPath(needsCompositing,
+        offset,offset & size,
+        getClip(size,isArrowUp,arrowRect,bodyRect),(context,offset){
+          context.pushTransform(needsCompositing, offset, transform,(context,offset){
+            final Paint backgroundPaint = Paint();
+            backgroundPaint.color = color;
+            context.canvas.drawRect(offset & size, backgroundPaint);
+            super.paint(context,offset);
+          });
+        });
+  }
+
+
+  Path getClip(Size size,bool isArrowUp,Rect arrowRect,Rect bodyRect) {
     Path path = new Path();
 
     if(isArrowUp)
@@ -257,10 +441,4 @@ class ArrowCliper extends CustomClipper<Path>{
     path.close();
     return path;
   }
-
-  @override
-  bool shouldReclip(ArrowCliper oldClipper) {
-    return this.isArrowUp != oldClipper.isArrowUp || this.arrowRect != oldClipper.arrowRect || this.bodyRect != oldClipper.bodyRect;
-  }
-
 }

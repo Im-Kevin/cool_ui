@@ -60,7 +60,6 @@ class PopoverDemoState extends State<PopoverDemo>{
     return Padding(
         padding:  EdgeInsets.all(20.0),
         child:CupertinoPopoverButton(
-
             child: Container(
               width: 80.0,
               height: 40.0,
@@ -72,6 +71,7 @@ class PopoverDemoState extends State<PopoverDemo>{
               child: Center(child:Text(btnTitle)),
             ),
             popoverBuild: (context) {
+//              return Text("satatastas");
               return CupertinoPopoverMenuList(
                 children: <Widget>[
                   CupertinoPopoverMenuItem(leading: Icon(Icons.add),child: Text("新增"),),
@@ -79,9 +79,7 @@ class PopoverDemoState extends State<PopoverDemo>{
                   CupertinoPopoverMenuItem(leading: Icon(Icons.delete),child: Text("删除"),)
                 ],
               );
-            },
-            popoverWidth: 150.0,
-            popoverHeight: 123.0)
+            })
 
     );
 

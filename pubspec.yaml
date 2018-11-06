@@ -1,6 +1,6 @@
 name: cool_ui
 description: 用flutter实现一些我认为好看的UI控件,目前暂时只有Popover,Weui，不过有什么觉得好看的可以提Issue
-version: 0.1.4
+version: 0.1.5
 author: Kevin <liangkaikevin@gmail.com>
 homepage: https://github.com/Im-Kevin/cool_ui
 

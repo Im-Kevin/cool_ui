@@ -7,7 +7,7 @@ Usage
 Add this to your package's pubspec.yaml file:
 ``` yaml
 dependencies:
-  cool_ui: "^0.1.4"
+  cool_ui: "^0.1.5"
 ```
 
 # 控件
@@ -31,6 +31,7 @@ CupertinoPopoverButton({
     this.popoverColor=Colors.white,
     @required this.popoverWidth,
     @required this.popoverHeight,
+    BoxConstraints popoverConstraints,
     this.onTap,
     this.transitionDuration=const Duration(milliseconds: 200),
     this.radius=8.0});
@@ -41,8 +42,9 @@ CupertinoPopoverButton({
 | --- | --- | --- | --- |
 | child | <code>Widget</code> |  | 按钮的内容 |
 | popoverBuild | <code>WidgetBuilder</code> |  | 生成弹出框的内容 |
-| popoverWidth | <code>double</code> |  | 弹出框的宽度 |
-| popoverHeight | <code>double</code> |  | 弹出框的高度 |
+| [popoverWidth] | <code>double</code> |  | 弹出框的宽度 |
+| [popoverHeight] | <code>double</code> |  | 弹出框的高度 |
+| [popoverConstraints] | <code>BoxConstraints</code> | maxHeight:123.0  maxWidth:150.0 | 弹出框的最大最小高宽|
 | [onTap] | <code>BoolCallback</code> |  | 按钮点击事件,返回true取消默认反应(不打开Popover) |
 | [popoverColor] | <code>Color</code> | 白色 | 弹出框的背景颜色 |
 | [transitionDuration] | <code>Duration</code> | 0.2s  | 过度动画时间 |
@@ -70,9 +72,7 @@ CupertinoPopoverButton(
                           height: 100.0,
                           child: Text('左上角内容'),
                         )
-        },
-        popoverWidth: 100.0,
-        popoverHeight: 100.0);
+        });
 ```
 
 ![Image text](./images/popover_demo.gif)
