@@ -7,7 +7,7 @@ Usage
 Add this to your package's pubspec.yaml file:
 ``` yaml
 dependencies:
-  cool_ui: "^0.1.5"
+  cool_ui: "^0.1.6"
 ```
 
 # 控件
