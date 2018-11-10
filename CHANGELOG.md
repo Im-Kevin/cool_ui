@@ -1,3 +1,8 @@
+## [0.1.6] - TODO:修改了Toast的位置计算方式
+* TODO: 修改了Toast的位置计算方式
+* TODO: 开放了Toast的位置设置
+* TODO: 修改了README.md文档的大小
+
 ## [0.1.5] - TODO:添加了popoverConstraints参数
 * TODO: CupertionPopoverButton添加了CupertionPopoverButton参数,用于设置最大最小宽度,取消必填的高宽
 
