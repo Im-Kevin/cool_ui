@@ -99,7 +99,7 @@ const CupertinoPopoverMenuItem({
     this.isTapClosePopover=true
   });
 ```
-| Param | Type |  Description |
+| Param | Type |  Default | Description |
 | --- | --- | --- | --- |
 | [leading] | <code>Widget<Widget></code>  | 菜单左边,一般放图标 |
 | [child] | <code>Widget<Widget></code>  | 菜单内容 |
