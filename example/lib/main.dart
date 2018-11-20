@@ -1,10 +1,16 @@
 import 'package:cool_ui_example/cool_u_i_example_icons.dart';
+import 'package:cool_ui_example/pages/custom_keyboard.dart';
 import 'package:cool_ui_example/pages/paint_event_demo.dart';
 import 'package:cool_ui_example/pages/popover_demo.dart';
 import 'package:cool_ui_example/pages/weui_toast_demo.dart';
+import 'package:cool_ui/cool_ui.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main(){
+  NumberKeyboard.register();
+  runApp(MyApp());
+}
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -21,9 +27,9 @@ class MyApp extends StatelessWidget {
         // "hot reload" (press "r" in the console where you ran "flutter run",
         // or press Run > Flutter Hot Reload in IntelliJ). Notice that the
         // counter didn't reset back to zero; the application is not restarted.
-        primarySwatch: Colors.blue
+          primarySwatch: Colors.blue
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page')
     );
   }
 }
@@ -69,34 +75,40 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: ListView(
-        children: <Widget>[
-          ListTile(
-            leading: Icon(CoolUIExampleIcon.popover),
-            title: Text("Popover"),
-            onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PopoverDemo()));
-            },
-          ),
-          ListTile(
-            title: Text("PaintEvent"),
-            onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PaintEventDemo()));
-            },
-          ),
-          ListTile(
-            title: Text("WeuiToastEvent"),
-            onTap: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>WeuiToastDemo()));
-            },
-          )
-        ],
-      )
+        appBar: AppBar(
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+        ),
+        body: ListView(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(CoolUIExampleIcon.popover),
+              title: Text("Popover"),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PopoverDemo()));
+              },
+            ),
+            ListTile(
+              title: Text("PaintEvent"),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PaintEventDemo()));
+              },
+            ),
+            ListTile(
+              title: Text("WeuiToastEvent"),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>WeuiToastDemo()));
+              },
+            ),
+            ListTile(
+              title: Text("CustomKeyboardEvent"),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CustomKeyboardDemo()));
+              },
+            )
+          ],
+        )
     );
   }
 }
