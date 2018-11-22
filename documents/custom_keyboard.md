@@ -1,5 +1,9 @@
 # 自定义键盘使用方法快速入门
 
+## 效果
+
+<img width="38%" height="38%" src="./images/custom_keyboard.gif"/>
+
 ## Step1
 编写个性化的键盘
 

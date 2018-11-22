@@ -7,7 +7,7 @@ Usage
 Add this to your package's pubspec.yaml file:
 ``` yaml
 dependencies:
-  cool_ui: "^0.1.8"
+  cool_ui: "^0.1.9"
 ```
 
 # 控件
@@ -22,5 +22,5 @@ dependencies:
 
 # 自定义键盘
 
-- [Get started](#自定义键盘使用方法快速入门)
-- [KeyboardController](#KeyboardController)
+- [Get started](documents/custom_keyboard.md#Step1)
+- [KeyboardController](documents/custom_keyboard.md#KeyboardController)
