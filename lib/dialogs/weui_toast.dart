@@ -159,7 +159,6 @@ VoidCallback showWeuiToast({
   Alignment alignment = const Alignment(0.0,-0.2),
   RouteTransitionsBuilder transitionBuilder}){
   Completer<VoidCallback> result = Completer<VoidCallback>();
-
   Navigator.of(context,rootNavigator: true).push(
       WeuiToast(
         alignment: alignment,
