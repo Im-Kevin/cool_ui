@@ -21,7 +21,10 @@ class KeyboardMediaQueryState extends State<KeyboardMediaQuery >{
     return MediaQuery(
         child: widget.child,
         data:data.copyWith(viewInsets: data.viewInsets.copyWith(bottom: CoolKeyboard.keyboardHeight))
-    );;
+    );
   }
 
+  update(){
+    setState(()=>{});
+  }
 }

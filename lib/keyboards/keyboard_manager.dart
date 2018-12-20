@@ -111,7 +111,9 @@ class CoolKeyboard {
       return;
     _pageKey = GlobalKey<KeyboardPageState>();
     _keyboardHeight = _currentKeyboard.getHeight(_context);
-    _context.ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>()).setState((){});
+    KeyboardMediaQueryState queryState = _context.ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>()) as  KeyboardMediaQueryState;
+    queryState.update();
+
     var tempKey = _pageKey;
     _keyboardEntry = OverlayEntry(builder: (ctx) {
       if(_currentKeyboard != null && _keyboardHeight != null)
@@ -153,7 +155,9 @@ class CoolKeyboard {
       }
     }
     _pageKey = null;
-    _context.ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>()).setState((){});
+
+    KeyboardMediaQueryState queryState = _context.ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>()) as  KeyboardMediaQueryState;
+    queryState.update();
   }
 
   static clearKeyboard(){

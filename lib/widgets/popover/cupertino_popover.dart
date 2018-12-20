@@ -3,7 +3,6 @@ part of cool_ui;
 typedef BoolCallback = bool Function();
 class CupertinoPopoverButton extends StatelessWidget{
   final Widget child;
-  final Widget popoverBody;
   final WidgetBuilder popoverBuild;
   final double popoverWidth;
   final double popoverHeight;
@@ -15,10 +14,6 @@ class CupertinoPopoverButton extends StatelessWidget{
 
   CupertinoPopoverButton({
     @required this.child,
-    @Deprecated(
-        '建议不要直接使用popoverBody,而是使用popoverBuild.'
-    )
-    this.popoverBody,
     this.popoverBuild,
     this.popoverColor=Colors.white,
     this.popoverWidth,
@@ -27,8 +22,7 @@ class CupertinoPopoverButton extends StatelessWidget{
     this.onTap,
     this.transitionDuration=const Duration(milliseconds: 200),
     this.radius=8.0}):
-        assert(popoverBody != null || popoverBuild != null),
-        assert(!(popoverBody != null && popoverBuild != null)),
+        assert(popoverBuild != null),
         this.popoverConstraints =
         (popoverWidth != null || popoverHeight != null)
 
@@ -47,7 +41,7 @@ class CupertinoPopoverButton extends StatelessWidget{
         }
         var offset = WidgetUtil.getWidgetLocalToGlobal(context);
         var bounds = WidgetUtil.getWidgetBounds(context);
-        var body = popoverBody;
+        var body;
         showGeneralDialog(
           context: context,
           pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
@@ -88,6 +82,7 @@ class CupertinoPopoverButton extends StatelessWidget{
   }
 }
 
+// ignore: must_be_immutable
 class CupertinoPopover extends StatefulWidget {
   final Rect attachRect;
   final Widget child;
@@ -237,15 +232,15 @@ class _CupertionPopoverPositionRenderObject extends RenderShiftedBox{
   Offset calcOffset(Size size){
     double bodyLeft = 0.0;
 
-    var isArrowUp = ScreenUtil.singleton.screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
+    var isArrowUp = ScreenUtil.getInstance().screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
 
     if(attachRect.left > size.width / 2 &&
-        ScreenUtil.singleton.screenWidth - attachRect.right > size.width / 2){ //判断是否可以在中间
+        ScreenUtil.getInstance().screenWidth - attachRect.right > size.width / 2){ //判断是否可以在中间
       bodyLeft = attachRect.left +  attachRect.width / 2 - size.width / 2;
     }else if(attachRect.left < size.width / 2){ //靠左
       bodyLeft = 10.0;
     }else{ //靠右
-      bodyLeft = ScreenUtil.singleton.screenWidth - 10.0 - size.width;
+      bodyLeft = ScreenUtil.getInstance().screenWidth - 10.0 - size.width;
     }
 
     if(isArrowUp){
@@ -347,7 +342,7 @@ class _CupertionPopoverContextRenderObject extends RenderShiftedBox{
     child.layout(childConstraints, parentUsesSize: true);
     size = Size(child.size.width,child.size.height + CupertinoPopoverState._arrowHeight);
     final BoxParentData childParentData = child.parentData;
-    var isArrowUp = ScreenUtil.singleton.screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
+    var isArrowUp = ScreenUtil.getInstance().screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
     if(isArrowUp)
     {
       childParentData.offset = Offset(0.0, CupertinoPopoverState._arrowHeight);
@@ -359,7 +354,7 @@ class _CupertionPopoverContextRenderObject extends RenderShiftedBox{
     // TODO: implement paint
     Matrix4 transform = Matrix4.identity();
 //
-    var isArrowUp = ScreenUtil.singleton.screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
+    var isArrowUp = ScreenUtil.getInstance().screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
 
     var arrowLeft =attachRect.left + attachRect.width / 2 - CupertinoPopoverState._arrowWidth / 2 - offset.dx;
     var translation = Offset(arrowLeft + CupertinoPopoverState._arrowWidth / 2,isArrowUp?0.0:size.height);

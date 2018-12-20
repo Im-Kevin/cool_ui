@@ -216,7 +216,7 @@ class WeuiLoadingIconState extends State<WeuiLoadingIcon>
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
-      angle: (_doubleAnimation.value / 30).toInt() * 30.0 * 0.0174533,
+      angle: _doubleAnimation.value ~/ 30 * 30.0 * 0.0174533,
       child: Image.asset("assets/images/loading.png",
         package: "cool_ui",
         width: widget.size,
