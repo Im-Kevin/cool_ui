@@ -39,8 +39,8 @@ class CupertinoPopoverButton extends StatelessWidget{
         if(onTap != null && onTap()){
           return;
         }
-        var offset = WidgetUtil.getWidgetLocalToGlobal(context);
-        var bounds = WidgetUtil.getWidgetBounds(context);
+        var offset = _WidgetUtil.getWidgetLocalToGlobal(context);
+        var bounds = _WidgetUtil.getWidgetBounds(context);
         var body;
         showGeneralDialog(
           context: context,
@@ -232,15 +232,15 @@ class _CupertionPopoverPositionRenderObject extends RenderShiftedBox{
   Offset calcOffset(Size size){
     double bodyLeft = 0.0;
 
-    var isArrowUp = ScreenUtil.getInstance().screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
+    var isArrowUp = _ScreenUtil.getInstance().screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
 
     if(attachRect.left > size.width / 2 &&
-        ScreenUtil.getInstance().screenWidth - attachRect.right > size.width / 2){ //判断是否可以在中间
+        _ScreenUtil.getInstance().screenWidth - attachRect.right > size.width / 2){ //判断是否可以在中间
       bodyLeft = attachRect.left +  attachRect.width / 2 - size.width / 2;
     }else if(attachRect.left < size.width / 2){ //靠左
       bodyLeft = 10.0;
     }else{ //靠右
-      bodyLeft = ScreenUtil.getInstance().screenWidth - 10.0 - size.width;
+      bodyLeft = _ScreenUtil.getInstance().screenWidth - 10.0 - size.width;
     }
 
     if(isArrowUp){
@@ -342,7 +342,7 @@ class _CupertionPopoverContextRenderObject extends RenderShiftedBox{
     child.layout(childConstraints, parentUsesSize: true);
     size = Size(child.size.width,child.size.height + CupertinoPopoverState._arrowHeight);
     final BoxParentData childParentData = child.parentData;
-    var isArrowUp = ScreenUtil.getInstance().screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
+    var isArrowUp = _ScreenUtil.getInstance().screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
     if(isArrowUp)
     {
       childParentData.offset = Offset(0.0, CupertinoPopoverState._arrowHeight);
@@ -354,7 +354,7 @@ class _CupertionPopoverContextRenderObject extends RenderShiftedBox{
     // TODO: implement paint
     Matrix4 transform = Matrix4.identity();
 //
-    var isArrowUp = ScreenUtil.getInstance().screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
+    var isArrowUp = _ScreenUtil.getInstance().screenHeight > attachRect.bottom + size.height + CupertinoPopoverState._arrowHeight;
 
     var arrowLeft =attachRect.left + attachRect.width / 2 - CupertinoPopoverState._arrowWidth / 2 - offset.dx;
     var translation = Offset(arrowLeft + CupertinoPopoverState._arrowWidth / 2,isArrowUp?0.0:size.height);

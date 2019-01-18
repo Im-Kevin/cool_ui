@@ -8,7 +8,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flustars/flustars.dart';
+
+part 'utils/widget_util.dart';
+part 'utils/screen_util.dart';
 
 part 'icons/cool_ui_icons.dart';
 

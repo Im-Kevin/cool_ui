@@ -1,5 +1,8 @@
 part of cool_ui;
 
+
+typedef HideCallback = Future Function();
+
 class WeuiToast extends TransitionRoute{
   OverlayEntry _toastBarrier;
   final Widget message;
@@ -138,7 +141,7 @@ Future showWeuiSuccessToast({
 }
 
 
-VoidCallback showWeuiLoadingToast({
+HideCallback showWeuiLoadingToast({
   @required BuildContext context,
   @required Widget message,
   Alignment alignment = const Alignment(0.0,-0.2),
@@ -152,7 +155,7 @@ VoidCallback showWeuiLoadingToast({
       transitionBuilder:transitionBuilder);
 }
 
-VoidCallback showWeuiToast({
+HideCallback showWeuiToast({
   @required BuildContext context,
   @required Widget message,
   @required Widget icon,
@@ -170,10 +173,9 @@ VoidCallback showWeuiToast({
           }),
           icon: icon,
           transitionBuilder:transitionBuilder));
-  return (){
-    result.future.then((hide){
-      hide();
-    });
+  return () async{
+    var hide = await result.future;
+    hide();    
   };
 }
 
