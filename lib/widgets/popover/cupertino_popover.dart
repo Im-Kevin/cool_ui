@@ -11,6 +11,7 @@ class CupertinoPopoverButton extends StatelessWidget{
   final Duration transitionDuration;
   final BoolCallback onTap;
   final BoxConstraints popoverConstraints;
+  final Color barrierColor;
 
   CupertinoPopoverButton({
     @required this.child,
@@ -21,6 +22,7 @@ class CupertinoPopoverButton extends StatelessWidget{
     BoxConstraints popoverConstraints,
     this.onTap,
     this.transitionDuration=const Duration(milliseconds: 200),
+    this.barrierColor = Colors.black54,
     this.radius=8.0}):
         assert(popoverBuild != null),
         this.popoverConstraints =
@@ -54,7 +56,7 @@ class CupertinoPopoverButton extends StatelessWidget{
           },
           barrierDismissible: true,
           barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-          barrierColor: Colors.black54,
+          barrierColor: this.barrierColor,
           transitionDuration: transitionDuration,
           transitionBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
             if(body == null){

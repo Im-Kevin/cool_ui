@@ -26,6 +26,7 @@ CupertinoPopoverButton({
 | [popoverConstraints] | <code>BoxConstraints</code> | maxHeight:123.0  maxWidth:150.0 | 弹出框的最大最小高宽|
 | [onTap] | <code>BoolCallback</code> |  | 按钮点击事件,返回true取消默认反应(不打开Popover) |
 | [popoverColor] | <code>Color</code> | 白色 | 弹出框的背景颜色 |
+| [barrierColor] | <code>Color</code> | Colors.black54 | 遮罩层的颜色,目前不允许设置透明,如需要透明则使用Color.fromRGBO(0, 0, 0, 0.01)可达到类似效果|
 | [transitionDuration] | <code>Duration</code> | 0.2s  | 过度动画时间 |
 | [radius] | <code>double</code> |  8.0 | 弹出框的圆角弧度 |
 

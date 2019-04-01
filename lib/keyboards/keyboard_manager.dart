@@ -66,8 +66,12 @@ class CoolKeyboard {
               clearKeyboard();
               _currentKeyboard = keyboardConfig;
               _keyboardController = KeyboardController(client:client)..addListener((){
-                var callbackMethodCall = MethodCall("TextInputClient.updateEditingState",[_keyboardController.client.connectionId,_keyboardController.value.toJSON()]);
-                BinaryMessages.handlePlatformMessage("flutter/textinput", _codec.encodeMethodCall(callbackMethodCall), (data){});
+                var callbackMethodCall = MethodCall("TextInputClient.updateEditingState",[
+                                                    _keyboardController.client.connectionId,
+                                                    _keyboardController.value.toJSON()]);
+                BinaryMessages.handlePlatformMessage("flutter/textinput", _codec.encodeMethodCall(callbackMethodCall), (data){
+
+                });
               });
             }
           });
@@ -134,7 +138,7 @@ class CoolKeyboard {
   }
 
   static hideKeyboard({bool animation=true}){
-    if(_keyboardEntry != null) {
+    if(_keyboardEntry != null && _pageKey != null) {
       _keyboardHeight = null;
       _pageKey.currentState.animationController.addStatusListener((status) {
         if (status == AnimationStatus.dismissed ||
