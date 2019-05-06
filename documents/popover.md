@@ -13,6 +13,7 @@ CupertinoPopoverButton({
     BoxConstraints popoverConstraints,
     this.onTap,
     this.transitionDuration=const Duration(milliseconds: 200),
+    this.barrierColor = Colors.black54,
     this.radius=8.0});
 ```
 

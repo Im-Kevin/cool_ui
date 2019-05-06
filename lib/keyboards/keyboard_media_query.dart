@@ -17,7 +17,6 @@ class KeyboardMediaQueryState extends State<KeyboardMediaQuery >{
     
     // TODO: implement build
     var data = MediaQuery.of(context);
-    print('KeyboardMediaQuery${CoolKeyboard.keyboardHeight}');
     // TODO: implement build
     return MediaQuery(
         child: widget.child,

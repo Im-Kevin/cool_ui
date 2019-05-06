@@ -140,7 +140,7 @@ class CoolKeyboard {
   static hideKeyboard({bool animation=true}){
     if(_keyboardEntry != null && _pageKey != null) {
       _keyboardHeight = null;
-      _pageKey.currentState.animationController.addStatusListener((status) {
+      _pageKey.currentState.animationController.addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.dismissed ||
             status == AnimationStatus.completed) {
           if (_keyboardEntry != null) {
@@ -333,6 +333,10 @@ class KeyboardPageState extends State<KeyboardPage> with SingleTickerProviderSta
   @override
   void dispose() {
     super.dispose();
+    if(animationController.status == AnimationStatus.forward || animationController.status == AnimationStatus.reverse)
+      {
+        animationController.notifyStatusListeners(AnimationStatus.dismissed);
+      }
     animationController.dispose();
   }
 
