@@ -20,7 +20,7 @@ dependencies:
 - [showWeuiLoadingToast](documents/weui_toast.md#showWeuiLoadingToast)
 
 
-# 自定义键盘
+# 自定义键盘(Customize Keyboard)
 
 - [Get started](documents/custom_keyboard.md#Step1)
 - [KeyboardController](documents/custom_keyboard.md#KeyboardController)
