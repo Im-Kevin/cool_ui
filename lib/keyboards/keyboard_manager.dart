@@ -99,7 +99,7 @@ class CoolKeyboard {
           exception: exception,
           stack: stack,
           library: 'services library',
-          context: 'during a platform message response callback',
+          context: ErrorDescription('during a platform message response callback'),
         ));
       }
     });

@@ -1,3 +1,7 @@
+## [0.1.16]
+* Updated SDK constraint to support new error message formats
+* Updated error message formats
+
 ## [0.1.14] - TODO:修复了自定义键盘切换回原生键盘无法输入的问题
 * 修复了自定义键盘切换回原生键盘无法输入的问题
 * Popover可以设置遮罩层颜色
