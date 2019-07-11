@@ -3,12 +3,21 @@
 用flutter实现一些我认为好看的UI控件</br>
 希望大家提一些觉得不错的控件,我自己一个人想有时候想到的比较有限
 
-Usage
-Add this to your package's pubspec.yaml file:
+
+Usage Add this to your package's pubspec.yaml file: 
+
+Flutter >=1.7
 ``` yaml
 dependencies:
-  cool_ui: "^0.1.14"
+  cool_ui: "^0.1.16"
 ```
+
+Flutter < 1.7
+``` yaml
+dependencies:
+  cool_ui: "0.1.15"
+```
+
 
 # 控件
 
