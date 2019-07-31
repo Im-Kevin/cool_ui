@@ -28,7 +28,7 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo>{
               body: ListView(
                 children: <Widget>[
                   TextField(
-                    keyboardType: TextInputType.text,
+                    keyboardType: NumberKeyboard.inputType,
                   ),
                   Container(
                     height: 300.0,

@@ -27,7 +27,7 @@ class CoolKeyboard {
     if(isInterceptor)
       return;
     isInterceptor = true;
-    BinaryMessages.setMockMessageHandler("flutter/textinput", (ByteData data) async{
+    defaultBinaryMessenger.setMockMessageHandler("flutter/textinput", (ByteData data) async{
       var methodCall = _codec.decodeMethodCall(data);
       switch(methodCall.method){
         case 'TextInput.show':
@@ -69,7 +69,7 @@ class CoolKeyboard {
                 var callbackMethodCall = MethodCall("TextInputClient.updateEditingState",[
                                                     _keyboardController.client.connectionId,
                                                     _keyboardController.value.toJSON()]);
-                BinaryMessages.handlePlatformMessage("flutter/textinput", _codec.encodeMethodCall(callbackMethodCall), (data){
+                defaultBinaryMessenger.handlePlatformMessage("flutter/textinput", _codec.encodeMethodCall(callbackMethodCall), (data){
 
                 });
               });
@@ -135,9 +135,15 @@ class CoolKeyboard {
     });
 
     Overlay.of(_context).insert(_keyboardEntry);
+
+    BackButtonInterceptor.add((_){
+      CoolKeyboard.sendPerformAction(TextInputAction.done);
+      return true;
+    }, zIndex: 1, name:'CustomKeyboard');
   }
 
   static hideKeyboard({bool animation=true}){
+    BackButtonInterceptor.removeByName('CustomKeyboard');
     if(_keyboardEntry != null && _pageKey != null) {
       _keyboardHeight = null;
       _pageKey.currentState.animationController.addStatusListener((AnimationStatus status) {
@@ -178,7 +184,7 @@ class CoolKeyboard {
           _keyboardController.client.connectionId,
           action.toString()
         ]);
-    BinaryMessages.handlePlatformMessage(
+    defaultBinaryMessenger.handlePlatformMessage(
         "flutter/textinput", _codec.encodeMethodCall(callbackMethodCall), (
         data) {});
   }

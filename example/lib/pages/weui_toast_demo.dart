@@ -30,13 +30,13 @@ class WeuiToastDemoState extends State<WeuiToastDemo>{
               color: Colors.blue[400],
               child: Text("成功",style: TextStyle(color: Colors.white),),
 
-              onPressed: ()=>showWeuiSuccessToast(context:context,message: Text("成功啦!")),
+              onPressed: ()=>showWeuiSuccessToast(context:context),
             ),
             RaisedButton(
               color: Colors.blue[400],
               child: Text("加载中",style: TextStyle(color: Colors.white),),
               onPressed: (){
-                var hide = showWeuiLoadingToast(context:context, message:Text("加载中"));
+                var hide = showWeuiLoadingToast(context:context);
                 Future.delayed(Duration(seconds: 5),(){
                   hide();
                 });

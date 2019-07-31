@@ -1,3 +1,7 @@
+## [0.2.0]
+* TODO: 优化了WeuiToast的效果,添加了WeuiToastConfig,可以全局配置默认设置
+* TODO: 添加了Keyboard对android 返回按钮的监听
+
 ## [0.1.16]
 * Updated SDK constraint to support new error message formats
 * Updated error message formats

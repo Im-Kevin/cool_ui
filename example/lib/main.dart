@@ -16,7 +16,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return WeuiToastConfig(
+      data: WeuiToastConfigData(
+        successText: '测试ConfigData'
+      ),
+      child:MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -30,7 +34,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page')
-    );
+    ));
   }
 }
 
@@ -74,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
+    return  Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
