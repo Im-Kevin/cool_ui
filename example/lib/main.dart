@@ -6,8 +6,11 @@ import 'package:cool_ui_example/pages/weui_toast_demo.dart';
 import 'package:cool_ui/cool_ui.dart';
 import 'package:flutter/material.dart';
 
+import 'keyboards/test_keyboard.dart';
+
 void main(){
   NumberKeyboard.register();
+  TestKeyboard.register();
   runApp(MyApp());
 }
 

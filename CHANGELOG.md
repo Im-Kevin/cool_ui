@@ -1,3 +1,6 @@
+## [0.2.1]
+* TODO: 修复了多个自定义键盘无法切换的问题
+
 ## [0.2.0]
 * TODO: 优化了WeuiToast的效果,添加了WeuiToastConfig,可以全局配置默认设置
 * TODO: 添加了Keyboard对android 返回按钮的监听

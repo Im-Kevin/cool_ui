@@ -1,3 +1,4 @@
+import 'package:cool_ui_example/keyboards/test_keyboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cool_ui/cool_ui.dart';
@@ -28,7 +29,7 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo>{
               body: ListView(
                 children: <Widget>[
                   TextField(
-                    keyboardType: NumberKeyboard.inputType,
+                    keyboardType: TextInputType.text,
                   ),
                   Container(
                     height: 300.0,
@@ -36,6 +37,10 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo>{
                   TextField(
                     decoration: InputDecoration(labelText: '演示键盘弹出后滚动'),
                     keyboardType: NumberKeyboard.inputType,
+                  ),
+                  TextField(
+                    decoration: InputDecoration(labelText: '多个键盘演示'),
+                    keyboardType: TestKeyboard.inputType,
                   )
                 ],
               )
