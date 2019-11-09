@@ -14,7 +14,8 @@ class CustomKeyboardDemo extends StatefulWidget{
 }
 
 class CustomKeyboardDemoState extends State<CustomKeyboardDemo>{
-
+  TextEditingController textEditingController = TextEditingController(text:'test');
+  TextEditingController textEditing2Controller = TextEditingController(text:'test');
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +30,14 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo>{
               body: ListView(
                 children: <Widget>[
                   TextField(
+                    controller: textEditingController,
                     keyboardType: TextInputType.text,
                   ),
                   Container(
                     height: 300.0,
                   ),
                   TextField(
+                    controller: textEditing2Controller,
                     decoration: InputDecoration(labelText: '演示键盘弹出后滚动'),
                     keyboardType: NumberKeyboard.inputType,
                   ),

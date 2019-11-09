@@ -34,6 +34,22 @@ class KeyboardController extends ValueNotifier<TextEditingValue>{
     value = value.copyWith(selection: newSelection, composing: TextRange.empty);
   }
 
+  set value(TextEditingValue newValue) {
+
+    newValue = newValue.copyWith(  // 修正由于默认值导致的Bug
+      composing: TextRange(
+          start: newValue.composing.start < 0 ? 0: newValue.composing.start,
+          end: newValue.composing.end < 0 ? 0: newValue.composing.end
+      ),
+      selection: newValue.selection.copyWith(
+        baseOffset: newValue.selection.baseOffset < 0 ? 0: newValue.selection.baseOffset,
+        extentOffset: newValue.selection.extentOffset < 0 ? 0: newValue.selection.extentOffset
+      )
+    );
+
+    super.value = newValue;
+  }
+
   /// Set the [value] to empty.
   ///
   /// After calling this function, [text] will be the empty string and the

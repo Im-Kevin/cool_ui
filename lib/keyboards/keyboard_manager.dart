@@ -169,11 +169,14 @@ class CoolKeyboard {
       }
     }
     _pageKey = null;
+    try{
+      KeyboardMediaQueryState queryState = _context
+          .ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>())
+      as KeyboardMediaQueryState;
+      queryState.update();
+    }catch(_){
 
-    KeyboardMediaQueryState queryState = _context
-            .ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>())
-        as KeyboardMediaQueryState;
-    queryState.update();
+    }
   }
 
   static clearKeyboard() {
