@@ -42,12 +42,12 @@ class NumberKeyboard extends StatelessWidget{
 ```
 
 ## Step2
-注册键盘
+注册键盘,并且添加了KeyboardRootWidget
 
 ```dart
 void main(){
   NumberKeyboard.register(); //注册键盘
-  runApp(MyApp());
+  runApp(KeyboardRootWidget(child: MyApp())); //添加了KeyboardRootWidget
 }
 ```
 
@@ -58,10 +58,7 @@ void main(){
 @override
 Widget build(BuildContext context) {
   return KeyboardMediaQuery(//用于键盘弹出的时候页面可以滚动到输入框的位置
-      child: Builder(builder: (ctx) {
-        CoolKeyboard.init(ctx); //初始化键盘监听并且传递当前页面的context
-        return Page; //返回当前页面
-      })
+      child: Page
   );
 }
 ```
@@ -72,7 +69,7 @@ Widget build(BuildContext context) {
 ```dart
 TextField(
    ...
-   keyboardType: NumberKeyboard.inputType, 像平常一样设置键盘输入类型一样将Step2编写的inputType传递进去
+   keyboardType: NumberKeyboard.inputType, 像平常一样设置键盘输入类型一样将Step1编写的inputType传递进去
    ...
  )
 ```

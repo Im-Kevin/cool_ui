@@ -14,8 +14,7 @@ class CoolKeyboard {
   static GlobalKey<KeyboardPageState> _pageKey;
   static bool isInterceptor = false;
 
-  static double get keyboardHeight => _keyboardHeight;
-  static double _keyboardHeight;
+  static ValueNotifier<double> _keyboardHeightNotifier = ValueNotifier(null);
 
   static init(BuildContext context) {
     _context = context;
@@ -76,8 +75,12 @@ class CoolKeyboard {
                       _codec.encodeMethodCall(callbackMethodCall),
                       (data) {});
                 });
+              if (_pageKey != null) {
+                _pageKey.currentState.update();
+              }
             }
           });
+
           if (client != null) {
             await _sendPlatformMessage("flutter/textinput",
                 _codec.encodeMethodCall(MethodCall('TextInput.hide')));
@@ -119,21 +122,22 @@ class CoolKeyboard {
   static openKeyboard() {
     if (_keyboardEntry != null) return;
     _pageKey = GlobalKey<KeyboardPageState>();
-    _keyboardHeight = _currentKeyboard.getHeight(_context);
-    KeyboardMediaQueryState queryState = _context
-            .ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>())
-        as KeyboardMediaQueryState;
-    queryState.update();
+    var keyboardHeight = _currentKeyboard.getHeight(_context);
+    _keyboardHeightNotifier.value = keyboardHeight;
+    // KeyboardMediaQueryState queryState = _context
+    //         .ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>())
+    //     as KeyboardMediaQueryState;
+    // queryState.update();
 
     var tempKey = _pageKey;
     _keyboardEntry = OverlayEntry(builder: (ctx) {
-      if (_currentKeyboard != null && _keyboardHeight != null) {
+      if (_currentKeyboard != null && _keyboardHeightNotifier.value != null) {
         return KeyboardPage(
             key: tempKey,
-            child: Builder(builder: (ctx) {
-              return _currentKeyboard.builder(ctx, _keyboardController);
-            }),
-            height: _keyboardHeight);
+            builder: (ctx) {
+              return _currentKeyboard?.builder(ctx, _keyboardController);
+            },
+            height: _keyboardHeightNotifier.value);
       } else {
         return Container();
       }
@@ -150,7 +154,7 @@ class CoolKeyboard {
   static hideKeyboard({bool animation = true}) {
     BackButtonInterceptor.removeByName('CustomKeyboard');
     if (_keyboardEntry != null && _pageKey != null) {
-      _keyboardHeight = null;
+      _keyboardHeightNotifier.value = null;
       _pageKey.currentState.animationController
           .addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.dismissed ||
@@ -169,14 +173,12 @@ class CoolKeyboard {
       }
     }
     _pageKey = null;
-    try{
-      KeyboardMediaQueryState queryState = _context
-          .ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>())
-      as KeyboardMediaQueryState;
-      queryState.update();
-    }catch(_){
-
-    }
+    try {
+      // KeyboardMediaQueryState queryState = _context
+      //     .ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>())
+      // as KeyboardMediaQueryState;
+      // queryState.update();
+    } catch (_) {}
   }
 
   static clearKeyboard() {
@@ -321,9 +323,9 @@ class CKTextInputType extends TextInputType {
 }
 
 class KeyboardPage extends StatefulWidget {
-  final Widget child;
+  final WidgetBuilder builder;
   final double height;
-  const KeyboardPage({this.child, this.height, Key key}) : super(key: key);
+  const KeyboardPage({this.builder, this.height, Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => KeyboardPageState();
@@ -334,6 +336,7 @@ class KeyboardPageState extends State<KeyboardPage>
   AnimationController animationController;
   Animation<double> doubleAnimation;
   double bottom;
+  Widget _lastBuildWidget;
 
   @override
   void initState() {
@@ -351,7 +354,15 @@ class KeyboardPageState extends State<KeyboardPage>
   @override
   Widget build(BuildContext context) {
     return Positioned(
-        child: IntrinsicHeight(child: widget.child),
+        child: IntrinsicHeight(child: Builder(
+          builder: (ctx) {
+            var result = widget.builder(ctx);
+            if (result != null) {
+              _lastBuildWidget = result;
+            }
+            return _lastBuildWidget;
+          },
+        )),
         bottom: (widget.height - doubleAnimation.value) * -1);
   }
 
@@ -367,5 +378,9 @@ class KeyboardPageState extends State<KeyboardPage>
 
   exitKeyboard() {
     animationController.reverse();
+  }
+
+  update() {
+    this.setState(() {});
   }
 }

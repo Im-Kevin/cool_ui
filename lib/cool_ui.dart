@@ -26,3 +26,4 @@ part 'keyboards/keyboard_manager.dart';
 part 'keyboards/number_keyboard.dart';
 part 'keyboards/keyboard_controller.dart';
 part 'keyboards/keyboard_media_query.dart';
+part 'keyboards/keyboard_root.dart';

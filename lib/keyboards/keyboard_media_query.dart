@@ -12,19 +12,30 @@ class KeyboardMediaQuery extends StatefulWidget{
 }
 
 class KeyboardMediaQueryState extends State<KeyboardMediaQuery >{
+  double keyboardHeight;
+
+  @override
+  void initState(){
+    super.initState();
+    CoolKeyboard._keyboardHeightNotifier.addListener(onUpdateHeight);
+  }
+
   @override
   Widget build(BuildContext context) {
     
     // TODO: implement build
-    var data = MediaQuery.of(context);
+    var data = MediaQuery.of(context, nullOk: true);
+    if(data == null){
+      data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+    }
     // TODO: implement build
     return MediaQuery(
         child: widget.child,
-        data:data.copyWith(viewInsets: data.viewInsets.copyWith(bottom: CoolKeyboard.keyboardHeight))
+        data:data.copyWith(viewInsets: data.viewInsets.copyWith(bottom: CoolKeyboard._keyboardHeightNotifier.value ?? data.viewInsets.bottom))
     );
   }
 
-  update(){
+  onUpdateHeight(){
     setState(()=>{});
   }
 }

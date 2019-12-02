@@ -22,7 +22,7 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo>{
     // TODO: implement build
     return KeyboardMediaQuery(
         child: Builder(builder: (ctx) {
-          CoolKeyboard.init(ctx);
+          // CoolKeyboard.init(ctx);
           return Scaffold(
               appBar: AppBar(
                 title: Text("Custom Keyboard Demo"),
