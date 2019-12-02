@@ -36,6 +36,14 @@ class KeyboardMediaQueryState extends State<KeyboardMediaQuery >{
   }
 
   onUpdateHeight(){
-    setState(()=>{});
+    try{
+      setState(()=>{});
+    }catch(_){}
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    CoolKeyboard._keyboardHeightNotifier.removeListener(onUpdateHeight);
   }
 }

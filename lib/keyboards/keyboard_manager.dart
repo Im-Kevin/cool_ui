@@ -353,6 +353,7 @@ class KeyboardPageState extends State<KeyboardPage>
 
   @override
   Widget build(BuildContext context) {
+
     return Positioned(
         child: IntrinsicHeight(child: Builder(
           builder: (ctx) {
@@ -360,7 +361,10 @@ class KeyboardPageState extends State<KeyboardPage>
             if (result != null) {
               _lastBuildWidget = result;
             }
-            return _lastBuildWidget;
+            return ConstrainedBox(
+              constraints: BoxConstraints(minHeight: 0,minWidth: 0,maxHeight: widget.height, maxWidth: _ScreenUtil.getScreenW(context)),
+              child: _lastBuildWidget,
+            );
           },
         )),
         bottom: (widget.height - doubleAnimation.value) * -1);
@@ -381,6 +385,8 @@ class KeyboardPageState extends State<KeyboardPage>
   }
 
   update() {
-    this.setState(() {});
+    try{
+      setState(()=>{});
+    }catch(_){}
   }
 }
