@@ -120,10 +120,10 @@ class CoolKeyboard {
   }
 
   static openKeyboard() {
-    if (_keyboardEntry != null) return;
-    _pageKey = GlobalKey<KeyboardPageState>();
     var keyboardHeight = _currentKeyboard.getHeight(_context);
     _keyboardHeightNotifier.value = keyboardHeight;
+    if (_keyboardEntry != null) return;
+    _pageKey = GlobalKey<KeyboardPageState>();
     // KeyboardMediaQueryState queryState = _context
     //         .ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>())
     //     as KeyboardMediaQueryState;
