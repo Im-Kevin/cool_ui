@@ -9,7 +9,7 @@ Usage Add this to your package's pubspec.yaml file:
 Flutter >=1.7
 ``` yaml
 dependencies:
-  cool_ui: "^0.3.3"
+  cool_ui: "^0.4.0"
 ```
 
 Flutter < 1.7

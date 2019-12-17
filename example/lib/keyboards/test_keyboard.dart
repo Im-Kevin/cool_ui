@@ -6,13 +6,13 @@ class TestKeyboard extends StatelessWidget{
   static const CKTextInputType inputType = const CKTextInputType(name:'CKTestKeyboard');
   static double getHeight(BuildContext ctx){
     MediaQueryData mediaQuery = MediaQuery.of(ctx);
-    return mediaQuery.size.width / 3 / 2 * 4;
+    return mediaQuery.size.width / 3 / 2 * 2;
   }
   final KeyboardController controller ;
   const TestKeyboard({this.controller});
 
   static register(){
-    CoolKeyboard.addKeyboard(TestKeyboard.inputType,KeyboardConfig(builder: (context,controller){
+    CoolKeyboard.addKeyboard(TestKeyboard.inputType,KeyboardConfig(builder: (context,controller, params){
       return TestKeyboard(controller: controller);
     },getHeight: TestKeyboard.getHeight));
   }

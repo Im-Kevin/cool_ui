@@ -10,7 +10,7 @@ class NumberKeyboard extends StatelessWidget{
   const NumberKeyboard({this.controller});
 
   static register(){
-    CoolKeyboard.addKeyboard(NumberKeyboard.inputType,KeyboardConfig(builder: (context,controller){
+    CoolKeyboard.addKeyboard(NumberKeyboard.inputType,KeyboardConfig(builder: (context,controller, params){
       return NumberKeyboard(controller: controller);
     },getHeight: NumberKeyboard.getHeight));
   }

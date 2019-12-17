@@ -2,7 +2,7 @@ part of cool_ui;
 
 typedef GetKeyboardHeight = double Function(BuildContext context);
 typedef KeyboardBuilder = Widget Function(
-    BuildContext context, KeyboardController controller);
+    BuildContext context, KeyboardController controller, String param);
 
 class CoolKeyboard {
   static JSONMethodCodec _codec = const JSONMethodCodec();
@@ -14,7 +14,10 @@ class CoolKeyboard {
   static GlobalKey<KeyboardPageState> _pageKey;
   static bool isInterceptor = false;
 
-  static ValueNotifier<double> _keyboardHeightNotifier = ValueNotifier(null);
+  static ValueNotifier<double> _keyboardHeightNotifier = ValueNotifier(null)
+    ..addListener(updateKeyboardHeight);
+
+  static String _keyboardParam;
 
   static init(BuildContext context) {
     _context = context;
@@ -61,6 +64,9 @@ class CoolKeyboard {
           _keyboards.forEach((inputType, keyboardConfig) {
             if (inputType.name == setInputType['name']) {
               client = InputClient.fromJSON(methodCall.arguments);
+
+              _keyboardParam = (client.configuration.inputType as CKTextInputType).params;
+
               clearKeyboard();
               _currentKeyboard = keyboardConfig;
               _keyboardController = KeyboardController(client: client)
@@ -76,7 +82,7 @@ class CoolKeyboard {
                       (data) {});
                 });
               if (_pageKey != null) {
-                _pageKey.currentState.update();
+                _pageKey.currentState?.update();
               }
             }
           });
@@ -135,7 +141,7 @@ class CoolKeyboard {
         return KeyboardPage(
             key: tempKey,
             builder: (ctx) {
-              return _currentKeyboard?.builder(ctx, _keyboardController);
+              return _currentKeyboard?.builder(ctx, _keyboardController, _keyboardParam);
             },
             height: _keyboardHeightNotifier.value);
       } else {
@@ -155,18 +161,24 @@ class CoolKeyboard {
     BackButtonInterceptor.removeByName('CustomKeyboard');
     if (_keyboardEntry != null && _pageKey != null) {
       _keyboardHeightNotifier.value = null;
-      _pageKey.currentState.animationController
-          .addStatusListener((AnimationStatus status) {
-        if (status == AnimationStatus.dismissed ||
-            status == AnimationStatus.completed) {
+      // _pageKey.currentState.animationController
+      //     .addStatusListener((AnimationStatus status) {
+      //   if (status == AnimationStatus.dismissed ||
+      //       status == AnimationStatus.completed) {
+      //     if (_keyboardEntry != null) {
+      //       _keyboardEntry.remove();
+      //       _keyboardEntry = null;
+      //     }
+      //   }
+      // });
+      if (animation) {
+        _pageKey.currentState.exitKeyboard();
+        Future.delayed(Duration(milliseconds: 116)).then((_) {
           if (_keyboardEntry != null) {
             _keyboardEntry.remove();
             _keyboardEntry = null;
           }
-        }
-      });
-      if (animation) {
-        _pageKey.currentState.exitKeyboard();
+        });
       } else {
         _keyboardEntry.remove();
         _keyboardEntry = null;
@@ -194,6 +206,12 @@ class CoolKeyboard {
         [_keyboardController.client.connectionId, action.toString()]);
     defaultBinaryMessenger.handlePlatformMessage("flutter/textinput",
         _codec.encodeMethodCall(callbackMethodCall), (data) {});
+  }
+
+  static updateKeyboardHeight() {
+    if (_pageKey != null && _pageKey.currentState != null) {
+      _pageKey.currentState.updateHeight(_keyboardHeightNotifier.value);
+    }
   }
 }
 
@@ -284,8 +302,9 @@ class InputClient {
 
 class CKTextInputType extends TextInputType {
   final String name;
+  final String params;
 
-  const CKTextInputType({this.name, bool signed, bool decimal})
+  const CKTextInputType({this.name, bool signed, bool decimal, this.params})
       : super.numberWithOptions(signed: signed, decimal: decimal);
 
   @override
@@ -294,6 +313,7 @@ class CKTextInputType extends TextInputType {
       'name': name,
       'signed': signed,
       'decimal': decimal,
+      'params': params
     };
   }
 
@@ -307,18 +327,22 @@ class CKTextInputType extends TextInputType {
 
   bool operator ==(Object target) {
     if (target is CKTextInputType) {
-      if (this.toString() == target.toString()) {
+      if (this.name == target.toString()) {
         return true;
       }
     }
     return false;
   }
 
+  @override
+  int get hashCode => this.toString().hashCode;
+
   factory CKTextInputType.fromJSON(Map<String, dynamic> encoded) {
     return CKTextInputType(
         name: encoded['name'],
         signed: encoded['signed'],
-        decimal: encoded['decimal']);
+        decimal: encoded['decimal'],
+        params: encoded['params']);
   }
 }
 
@@ -331,62 +355,73 @@ class KeyboardPage extends StatefulWidget {
   State<StatefulWidget> createState() => KeyboardPageState();
 }
 
-class KeyboardPageState extends State<KeyboardPage>
-    with SingleTickerProviderStateMixin {
-  AnimationController animationController;
-  Animation<double> doubleAnimation;
-  double bottom;
+class KeyboardPageState extends State<KeyboardPage> {
   Widget _lastBuildWidget;
+  bool isClose = false;
+  double _height = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    animationController = new AnimationController(
-        duration: new Duration(milliseconds: 100), vsync: this)
-      ..addListener(() => setState(() {}));
-    doubleAnimation = new Tween(begin: 0.0, end: widget.height)
-        .animate(animationController)
-          ..addListener(() => setState(() {}));
-    animationController.forward(from: 0.0);
+    Future.delayed(Duration(milliseconds: 1)).then((_) {
+      setState(() {
+        _height = widget.height;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return Positioned(
-        child: IntrinsicHeight(child: Builder(
-          builder: (ctx) {
-            var result = widget.builder(ctx);
-            if (result != null) {
-              _lastBuildWidget = result;
-            }
-            return ConstrainedBox(
-              constraints: BoxConstraints(minHeight: 0,minWidth: 0,maxHeight: widget.height, maxWidth: _ScreenUtil.getScreenW(context)),
-              child: _lastBuildWidget,
-            );
-          },
-        )),
-        bottom: (widget.height - doubleAnimation.value) * -1);
+    return AnimatedPositioned(
+      child: IntrinsicHeight(child: Builder(
+        builder: (ctx) {
+          var result = widget.builder(ctx);
+          if (result != null) {
+            _lastBuildWidget = result;
+          }
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+                minHeight: 0,
+                minWidth: 0,
+                maxHeight: _height,
+                maxWidth: _ScreenUtil.getScreenW(context)),
+            child: _lastBuildWidget,
+          );
+        },
+      )),
+      left: 0,
+      width: _ScreenUtil.getScreenW(context),
+      bottom: _height * (isClose ? -1 : 0),
+      height: _height,
+      duration: Duration(milliseconds: 100),
+    );
   }
 
   @override
   void dispose() {
-    if (animationController.status == AnimationStatus.forward ||
-        animationController.status == AnimationStatus.reverse) {
-      animationController.notifyStatusListeners(AnimationStatus.dismissed);
-    }
-    animationController.dispose();
+    // if (animationController.status == AnimationStatus.forward ||
+    //     animationController.status == AnimationStatus.reverse) {
+    //   animationController.notifyStatusListeners(AnimationStatus.dismissed);
+    // }
+    // animationController.dispose();
     super.dispose();
   }
 
   exitKeyboard() {
-    animationController.reverse();
+    isClose = true;
   }
 
   update() {
-    try{
-      setState(()=>{});
-    }catch(_){}
+    try {
+      setState(() => {});
+    } catch (_) {}
+  }
+
+  updateHeight(double height) {
+    try {
+      this._height = height ?? 0;
+      setState(() => {});
+    } catch (_) {}
   }
 }

@@ -19,7 +19,7 @@ class NumberKeyboard extends StatelessWidget{
   const NumberKeyboard({this.controller});
 
    static register(){   //注册键盘的方法
-      CoolKeyboard.addKeyboard(NumberKeyboard.inputType,KeyboardConfig(builder: (context,controller){
+      CoolKeyboard.addKeyboard(NumberKeyboard.inputType,KeyboardConfig(builder: (context,controller, params){ // 可通过CKTextInputType传参数到键盘内部
         return NumberKeyboard(controller: controller);
       },getHeight: NumberKeyboard.getHeight));
     }
