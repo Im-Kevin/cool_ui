@@ -364,10 +364,10 @@ class KeyboardPageState extends State<KeyboardPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(Duration(milliseconds: 1)).then((_) {
-      setState(() {
-        _height = widget.height;
-      });
+    
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      _height = widget.height;
+      setState(()=>{});
     });
   }
 
@@ -413,15 +413,15 @@ class KeyboardPageState extends State<KeyboardPage> {
   }
 
   update() {
-    try {
-      setState(() => {});
-    } catch (_) {}
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      setState(()=>{});
+    });
   }
 
   updateHeight(double height) {
-    try {
+    WidgetsBinding.instance.addPostFrameCallback((_){
       this._height = height ?? 0;
-      setState(() => {});
-    } catch (_) {}
+      setState(()=>{});
+    });
   }
 }

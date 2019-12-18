@@ -43,13 +43,9 @@ class KeyboardMediaQueryState extends State<KeyboardMediaQuery >{
   }
 
   onUpdateHeight(){
-    try{
+    WidgetsBinding.instance.addPostFrameCallback((_){
       setState(()=>{});
-    }catch(_){
-      Future.delayed(Duration(milliseconds: 16), (){
-        this.onUpdateHeight();
-      });
-    }
+    });
   }
 
   @override
