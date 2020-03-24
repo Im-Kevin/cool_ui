@@ -155,7 +155,7 @@ class CupertinoPopoverState extends State<CupertinoPopover>  with TickerProvider
             scale: widget.doubleAnimation,
             radius: widget.radius,
             color: widget.color,
-            child: Material(child: widget.child),
+            child: Material(type: MaterialType.transparency, child: widget.child),
           ),
         )
       ],

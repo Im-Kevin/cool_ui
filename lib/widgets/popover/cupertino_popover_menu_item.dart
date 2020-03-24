@@ -91,7 +91,7 @@ class CupertinoPopoverMenuItemState extends State<CupertinoPopoverMenuItem>{
         }
       },
       child: Container(
-        color:isDown?Color(0xFFd9d9d9):Colors.white,
+        color:Colors.transparent,
         child: Padding(
           padding: EdgeInsets.only(top:2.5,bottom: 2.5),
           child: Row(
