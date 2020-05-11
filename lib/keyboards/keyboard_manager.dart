@@ -27,7 +27,7 @@ class CoolKeyboard {
   static interceptorInput() {
     if (isInterceptor) return;
     isInterceptor = true;
-    defaultBinaryMessenger.setMockMessageHandler("flutter/textinput",
+    ServicesBinding.instance.defaultBinaryMessenger.setMockMessageHandler("flutter/textinput",
         (ByteData data) async {
       var methodCall = _codec.decodeMethodCall(data);
       switch (methodCall.method) {
@@ -172,11 +172,12 @@ class CoolKeyboard {
       //   }
       // });
       if (animation) {
+        _keyboardEntry = null;
+        final keyboardEntry = _keyboardEntry;
         _pageKey.currentState.exitKeyboard();
         Future.delayed(Duration(milliseconds: 116)).then((_) {
-          if (_keyboardEntry != null) {
-            _keyboardEntry.remove();
-            _keyboardEntry = null;
+          if (keyboardEntry != null) {
+            keyboardEntry.remove();
           }
         });
       } else {
