@@ -172,8 +172,8 @@ class CoolKeyboard {
       //   }
       // });
       if (animation) {
-        _keyboardEntry = null;
         var keyboardEntry = _keyboardEntry;
+        _keyboardEntry = null;
         _pageKey.currentState.exitKeyboard();
         Future.delayed(Duration(milliseconds: 116)).then((_) {
           if (keyboardEntry != null) {
