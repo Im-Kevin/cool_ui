@@ -78,20 +78,31 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo> {
               child: Container(
                   padding: EdgeInsets.only(top: 10),
                   child: Material(
-                      child: TextField(
+                      child: Column(children: <Widget>[
+                        TextField(
                     inputFormatters: inputFormatters,
                     keyboardType: keyboardType,
                     autofocus: true,
                     onChanged: (newValue) {
                       value = newValue;
                     },
-                  )))));
-          return AnimatedPadding(
-              padding: MediaQuery.of(context).viewInsets +
-                  const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
-              duration: const Duration(milliseconds: 300),
-              // curve: Curves.linear,
-              child: CupertinoAlertDialog(
+                  ),
+                  TextField(
+                    inputFormatters: inputFormatters,
+                    keyboardType: TextInputType.text,
+                    onChanged: (newValue) {
+                      value = newValue;
+                    },
+                  ),
+                  TextField(
+                    inputFormatters: inputFormatters,
+                    keyboardType: keyboardType,
+                    onChanged: (newValue) {
+                      value = newValue;
+                    },
+                  )
+                      ],)))));
+          return CupertinoAlertDialog(
                 title: titleWidget,
                 content: Column(
                   children: children,
@@ -108,7 +119,7 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo> {
                     },
                   )
                 ],
-              ));
+              );
         });
   }
 }
