@@ -1,3 +1,7 @@
+## [0.5.5]
+* TODO: Popover添加了阴影效果
+* TODO: Popover 添加了方向
+
 ## [0.5.4]
 * TODO: Fix Bug Issues:47
 

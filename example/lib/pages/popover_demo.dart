@@ -60,6 +60,10 @@ class PopoverDemoState extends State<PopoverDemo>{
     return Padding(
         padding:  EdgeInsets.all(20.0),
         child:CupertinoPopoverButton(
+          popoverBoxShadow: [
+            BoxShadow(color: Colors.black12,blurRadius: 5.0)
+          ],
+          barrierColor: Color(0x01FFFFFF),
             child: Container(
               width: 80.0,
               height: 40.0,

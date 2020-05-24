@@ -8,9 +8,11 @@ CupertinoPopoverButton({
     this.child,
     this.popoverBuild,
     this.popoverColor=Colors.white,
+    this.popoverBoxShadow,
     @required this.popoverWidth,
     @required this.popoverHeight,
     BoxConstraints popoverConstraints,
+    this.direction = CupertinoPopoverDirection.bottom,
     this.onTap,
     this.transitionDuration=const Duration(milliseconds: 200),
     this.barrierColor = Colors.black54,
@@ -25,8 +27,10 @@ CupertinoPopoverButton({
 | [popoverWidth] | <code>double</code> |  | 弹出框的宽度 |
 | [popoverHeight] | <code>double</code> |  | 弹出框的高度 |
 | [popoverConstraints] | <code>BoxConstraints</code> | maxHeight:123.0  maxWidth:150.0 | 弹出框的最大最小高宽|
+| [direction] | <code>CupertinoPopoverDirection</code> | CupertinoPopoverDirection.bottom | 方向|
 | [onTap] | <code>BoolCallback</code> |  | 按钮点击事件,返回true取消默认反应(不打开Popover) |
 | [popoverColor] | <code>Color</code> | 白色 | 弹出框的背景颜色 |
+| [popoverBoxShadow] | <code>BoxShadow</code> |  | 弹出框的阴影 |
 | [barrierColor] | <code>Color</code> | Colors.black54 | 遮罩层的颜色,目前不允许设置透明,如需要透明则使用Color.fromRGBO(0, 0, 0, 0.01)可达到类似效果|
 | [transitionDuration] | <code>Duration</code> | 0.2s  | 过度动画时间 |
 | [radius] | <code>double</code> |  8.0 | 弹出框的圆角弧度 |
@@ -77,6 +81,8 @@ const CupertinoPopoverMenuItem({
     this.leading,
     this.child,
     this.onTap,
+    this.background = Colors.white,
+    this.activeBackground = const Color(0xFFd9d9d9),
     this.isTapClosePopover=true
   });
 ```
@@ -85,6 +91,8 @@ const CupertinoPopoverMenuItem({
 | [leading] | <code>Widget<Widget></code>  | 菜单左边,一般放图标 |
 | [child] | <code>Widget<Widget></code>  | 菜单内容 |
 | [onTap] | <code>BoolCallback</code> |  | 按钮点击事件,返回true取消默认反应(不关闭Popover) |
+| [activeBackground] | <code>Color</code> | Color(0xFFd9d9d9) | 按下时背景色 |
+| [background] | <code>Color</code> | Colors.white | 默认背景色 |
 | [isTapClosePopover] | <code>bool<Widget></code>  | 是否点击关闭 |
 
 #### 案例核心代码
