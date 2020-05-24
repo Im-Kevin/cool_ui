@@ -52,7 +52,7 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo> {
               ),
               TextField(
                 decoration: InputDecoration(labelText: '多个键盘演示'),
-                keyboardType: TestKeyboard.inputType,
+                keyboardType: NumberKeyboard.inputType,
               )
             ],
           ));
