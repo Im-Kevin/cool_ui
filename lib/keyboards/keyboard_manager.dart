@@ -8,8 +8,8 @@ class CoolKeyboard {
   static JSONMethodCodec _codec = const JSONMethodCodec();
   static KeyboardConfig _currentKeyboard;
   static Map<CKTextInputType, KeyboardConfig> _keyboards = {};
+  static KeyboardRootState _root;
   static BuildContext _context;
-  static OverlayEntry _keyboardEntry;
   static KeyboardController _keyboardController;
   static GlobalKey<KeyboardPageState> _pageKey;
   static bool isInterceptor = false;
@@ -21,7 +21,8 @@ class CoolKeyboard {
 
   static Timer clearTask;
 
-  static init(BuildContext context) {
+  static init(KeyboardRootState root, BuildContext context) {
+    _root = root;
     _context = context;
     interceptorInput();
   }
@@ -47,8 +48,9 @@ class CoolKeyboard {
           break;
         case 'TextInput.hide':
           if (_currentKeyboard != null) {
-            if(clearTask == null){
-              clearTask = new Timer(Duration(milliseconds: 16), ()=>hideKeyboard(animation: true));
+            if (clearTask == null) {
+              clearTask = new Timer(Duration(milliseconds: 16),
+                  () => hideKeyboard(animation: true));
             }
             return _codec.encodeSuccessEnvelope(null);
           } else {
@@ -63,8 +65,9 @@ class CoolKeyboard {
           }
           break;
         case 'TextInput.clearClient':
-          if(clearTask == null){
-            clearTask = new Timer(Duration(milliseconds: 16), ()=>hideKeyboard(animation: true));
+          if (clearTask == null) {
+            clearTask = new Timer(Duration(milliseconds: 16),
+                () => hideKeyboard(animation: true));
           }
           clearKeyboard();
           break;
@@ -104,7 +107,7 @@ class CoolKeyboard {
                 _codec.encodeMethodCall(MethodCall('TextInput.hide')));
             return _codec.encodeSuccessEnvelope(null);
           } else {
-            if(clearTask == null){
+            if (clearTask == null) {
               hideKeyboard(animation: false);
             }
             clearKeyboard();
@@ -142,7 +145,7 @@ class CoolKeyboard {
   static openKeyboard() {
     var keyboardHeight = _currentKeyboard.getHeight(_context);
     _keyboardHeightNotifier.value = keyboardHeight;
-    if (_keyboardEntry != null && _pageKey != null) return;
+    if (_root.hasKeyboard && _pageKey != null) return;
     _pageKey = GlobalKey<KeyboardPageState>();
     // KeyboardMediaQueryState queryState = _context
     //         .ancestorStateOfType(const TypeMatcher<KeyboardMediaQueryState>())
@@ -150,7 +153,7 @@ class CoolKeyboard {
     // queryState.update();
 
     var tempKey = _pageKey;
-    _keyboardEntry = OverlayEntry(builder: (ctx) {
+    _root.setKeyboard((ctx) {
       if (_currentKeyboard != null && _keyboardHeightNotifier.value != null) {
         return KeyboardPage(
             key: tempKey,
@@ -163,8 +166,6 @@ class CoolKeyboard {
         return Container();
       }
     });
-
-    Overlay.of(_context).insert(_keyboardEntry);
 
     BackButtonInterceptor.add((_) {
       CoolKeyboard.sendPerformAction(TextInputAction.done);
@@ -180,29 +181,24 @@ class CoolKeyboard {
       clearTask = null;
     }
     BackButtonInterceptor.removeByName('CustomKeyboard');
-    if (_keyboardEntry != null && _pageKey != null) {
+    if (_root.hasKeyboard && _pageKey != null) {
       // _pageKey.currentState.animationController
       //     .addStatusListener((AnimationStatus status) {
       //   if (status == AnimationStatus.dismissed ||
       //       status == AnimationStatus.completed) {
-      //     if (_keyboardEntry != null) {
+      //     if (_root.hasKeyboard) {
       //       _keyboardEntry.remove();
       //       _keyboardEntry = null;
       //     }
       //   }
       // });
       if (animation) {
-        var keyboardEntry = _keyboardEntry;
-        _keyboardEntry = null;
         _pageKey.currentState.exitKeyboard();
         Future.delayed(Duration(milliseconds: 116)).then((_) {
-          if (keyboardEntry != null) {
-            keyboardEntry.remove();
-          }
+          _root.clearKeyboard();
         });
       } else {
-        _keyboardEntry.remove();
-        _keyboardEntry = null;
+        _root.clearKeyboard();
       }
     }
     _pageKey = null;
@@ -231,7 +227,9 @@ class CoolKeyboard {
   }
 
   static updateKeyboardHeight() {
-    if (_pageKey != null && _pageKey.currentState != null && clearTask == null) {
+    if (_pageKey != null &&
+        _pageKey.currentState != null &&
+        clearTask == null) {
       _pageKey.currentState.updateHeight(_keyboardHeightNotifier.value);
     }
   }
