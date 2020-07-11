@@ -1,3 +1,6 @@
+## [0.6.1]
+* TODO: CupertinoPopoverDirection添加了left和right
+
 ## [0.6.0]
 * TODO: 重构了键盘弹出的方式,修复长按输入框报错问题
 

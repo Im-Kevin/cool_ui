@@ -2,6 +2,7 @@ import 'package:cool_ui_example/cool_u_i_example_icons.dart';
 import 'package:cool_ui_example/pages/custom_keyboard.dart';
 import 'package:cool_ui_example/pages/paint_event_demo.dart';
 import 'package:cool_ui_example/pages/popover_demo.dart';
+import 'package:cool_ui_example/pages/table_demo.dart';
 import 'package:cool_ui_example/pages/weui_toast_demo.dart';
 import 'package:cool_ui/cool_ui.dart';
 import 'package:flutter/material.dart';
@@ -112,6 +113,13 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => CustomKeyboardDemo()));
+              },
+            ),
+            ListTile(
+              title: Text("TableEvent"),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => TableDemo()));
               },
             )
           ],
