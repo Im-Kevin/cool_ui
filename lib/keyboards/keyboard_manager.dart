@@ -44,7 +44,7 @@ class CoolKeyboard {
             return _codec.encodeSuccessEnvelope(null);
           } else {
             if (data !=  null) {
-              return await _sendPlatformMessage("flutter/textinput", data!);
+              return await _sendPlatformMessage("flutter/textinput", data);
             }
           }
           break;

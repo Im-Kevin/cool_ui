@@ -28,7 +28,7 @@ class KeyboardMediaQueryState extends State<KeyboardMediaQuery >{
     if(data == null){
       data = MediaQueryData.fromWindow(WidgetsBinding.instance!.window);
     }
-    var bottom = CoolKeyboard._keyboardHeightNotifier.value ?? data.viewInsets.bottom;
+    var bottom = CoolKeyboard._keyboardHeightNotifier.value != 0 ? CoolKeyboard._keyboardHeightNotifier.value : data.viewInsets.bottom;
     // TODO: implement build
     return MediaQuery(
         child: widget.child,
