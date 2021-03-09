@@ -54,9 +54,9 @@ class CoolTableState extends State<CoolTable>{
 }
 
 class CoolColumnInfo{
-  final double flex;
-  final double width;
-  final Widget title;
+  final double? flex;
+  final double? width;
+  final Widget? title;
 
   const CoolColumnInfo({this.flex, this.width, this.title});
 }

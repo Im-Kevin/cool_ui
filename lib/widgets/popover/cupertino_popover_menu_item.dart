@@ -2,7 +2,7 @@ part of cool_ui;
 
 class CupertinoPopoverMenuList extends StatelessWidget {
   final List<Widget> children;
-  const CupertinoPopoverMenuList({this.children});
+  const CupertinoPopoverMenuList({this.children = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +25,16 @@ class CupertinoPopoverMenuList extends StatelessWidget {
 }
 
 class CupertinoPopoverMenuItem extends StatefulWidget {
-  final Widget leading;
+  final Widget? leading;
   final Widget child;
-  final BoolCallback onTap;
+  final BoolCallback? onTap;
   final bool isTapClosePopover;
   final Color activeBackground;
   final Color background;
 
   const CupertinoPopoverMenuItem(
       {this.leading,
-      this.child,
+      required this.child,
       this.onTap,
       this.background = Colors.white,
       this.activeBackground = const Color(0xFFd9d9d9),
@@ -57,7 +57,7 @@ class CupertinoPopoverMenuItemState extends State<CupertinoPopoverMenuItem> {
         height: 35.0,
         child: IconTheme(
             data: IconThemeData(color: Color(0xff007aff), size: 20.0),
-            child: widget.leading),
+            child: widget.leading!),
       ));
     }
     widgets.add(Expanded(
@@ -75,7 +75,7 @@ class CupertinoPopoverMenuItemState extends State<CupertinoPopoverMenuItem> {
           setState(() {
             isDown = false;
           });
-          if (widget.onTap != null && widget.onTap()) {
+          if (widget.onTap != null && widget.onTap!()) {
             return;
           }
           if (widget.isTapClosePopover) {

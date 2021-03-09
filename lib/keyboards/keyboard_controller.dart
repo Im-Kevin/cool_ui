@@ -3,7 +3,7 @@ part of cool_ui;
 class KeyboardController extends ValueNotifier<TextEditingValue>{
   final InputClient client;
 
-  KeyboardController({TextEditingValue value,this.client})
+  KeyboardController({TextEditingValue? value,required this.client})
       : super(value == null ? TextEditingValue.empty : value);
 
 

@@ -9,7 +9,7 @@ class TestKeyboard extends StatelessWidget{
     return mediaQuery.size.width / 3 / 2 * 2;
   }
   final KeyboardController controller ;
-  const TestKeyboard({this.controller});
+  const TestKeyboard({required this.controller});
 
   static register(){
     CoolKeyboard.addKeyboard(TestKeyboard.inputType,KeyboardConfig(builder: (context,controller, params){
@@ -70,17 +70,14 @@ class TestKeyboard extends StatelessWidget{
     );
   }
 
-  Widget buildButton(String title,{String value}){
-    if(value == null){
-      value = title;
-    }
+  Widget buildButton(String title,{String? value}){
     return Container(
       color: Colors.white,
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         child: Center(child: Text(title),),
         onTap: (){
-          controller.addText(value);
+          controller.addText(value ?? title);
         },
       ),
     );

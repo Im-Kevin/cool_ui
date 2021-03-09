@@ -59,13 +59,13 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo> {
     }));
   }
 
-  static Future<String> showInputDialogs(
-      {@required BuildContext context,
-      Widget titleWidget,
-      Widget messageWidget,
-      List<TextInputFormatter> inputFormatters,
+  static Future<String?> showInputDialogs(
+      {required BuildContext context,
+      Widget? titleWidget,
+      Widget? messageWidget,
+      List<TextInputFormatter>? inputFormatters,
       TextInputType keyboardType = TextInputType.number}) {
-    String value;
+    String? value;
     return showCupertinoDialog<String>(
         context: context,
         builder: (context) {

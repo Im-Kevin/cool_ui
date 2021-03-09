@@ -5,15 +5,15 @@ typedef PaintCallback = void Function(PaintingContext context, Offset offset,Siz
 class PaintEvent extends SingleChildRenderObjectWidget{
 
 
-  final PaintCallback paintBefore;
-  final PaintCallback paintAfter;
+  final PaintCallback? paintBefore;
+  final PaintCallback? paintAfter;
 
 
   const PaintEvent({
-    Key key,
+    Key? key,
     this.paintBefore,
     this.paintAfter,
-    Widget child
+    Widget? child
   }) :
         super(key: key, child: child);
   @override
@@ -34,11 +34,11 @@ class PaintEvent extends SingleChildRenderObjectWidget{
 
 
 class PaintEventProxyBox extends RenderProxyBox{
-  PaintCallback paintBefore;
-  PaintCallback paintAfter;
+  PaintCallback? paintBefore;
+  PaintCallback? paintAfter;
 
   PaintEventProxyBox({
-    RenderBox child,
+    RenderBox? child,
     this.paintBefore,
     this.paintAfter
   }):super(child);
@@ -51,11 +51,8 @@ class PaintEventProxyBox extends RenderProxyBox{
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    assert(size.width != null);
-    assert(size.height != null);
-
     if(this.paintBefore != null){
-      this.paintBefore(context,offset,size);
+      this.paintBefore!(context,offset,size);
     }
 
     super.paint(context, offset);
@@ -63,7 +60,7 @@ class PaintEventProxyBox extends RenderProxyBox{
 
 
     if(this.paintAfter != null){
-      this.paintAfter(context,offset,size);
+      this.paintAfter!(context,offset,size);
     }
 
   }

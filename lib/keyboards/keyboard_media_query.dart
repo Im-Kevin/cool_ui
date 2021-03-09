@@ -3,8 +3,7 @@ part of cool_ui;
 class KeyboardMediaQuery extends StatefulWidget{
   final Widget child;
 
-  KeyboardMediaQuery({this.child})
-      : assert(child != null);
+  KeyboardMediaQuery({required this.child});
 
   @override
   State<StatefulWidget> createState() =>KeyboardMediaQueryState();
@@ -12,23 +11,22 @@ class KeyboardMediaQuery extends StatefulWidget{
 }
 
 class KeyboardMediaQueryState extends State<KeyboardMediaQuery >{
-  double keyboardHeight;
-  ValueNotifier<double> keyboardHeightNotifier;
+  double keyboardHeight = 0;
+  ValueNotifier<double> keyboardHeightNotifier = CoolKeyboard._keyboardHeightNotifier;
 
   @override
   void initState(){
     super.initState();
     CoolKeyboard._keyboardHeightNotifier.addListener(onUpdateHeight);
-    keyboardHeightNotifier = CoolKeyboard._keyboardHeightNotifier;
   }
 
   @override
   Widget build(BuildContext context) {
     
     // TODO: implement build
-    var data = MediaQuery.of(context, nullOk: true);
+    var data = MediaQuery.maybeOf(context);
     if(data == null){
-      data = MediaQueryData.fromWindow(WidgetsBinding.instance.window);
+      data = MediaQueryData.fromWindow(WidgetsBinding.instance!.window);
     }
     var bottom = CoolKeyboard._keyboardHeightNotifier.value ?? data.viewInsets.bottom;
     // TODO: implement build
@@ -43,7 +41,7 @@ class KeyboardMediaQueryState extends State<KeyboardMediaQuery >{
   }
 
   onUpdateHeight(){
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance!.addPostFrameCallback((_){
       setState(()=>{});
     });
   }

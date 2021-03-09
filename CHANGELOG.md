@@ -1,3 +1,13 @@
+## [1.0.0]
+* TODO: 升级至flutter 2.0
+* TODO: 处理了空安全
+
+## [0.6.3]
+* TODO: 指定back_button_interceptor依赖
+
+## [0.6.2]
+* TODO: 指定back_button_interceptor依赖
+
 ## [0.6.1]
 * TODO: CupertinoPopoverDirection添加了left和right
 

@@ -4,11 +4,11 @@ typedef HideCallback = Future Function();
 
 class WeuiToastWidget extends StatelessWidget {
   const WeuiToastWidget({
-    Key key,
-    @required this.stopEvent,
-    @required this.alignment,
-    @required this.icon,
-    @required this.message,
+    Key? key,
+    required this.stopEvent,
+    required this.alignment,
+    required this.icon,
+    required this.message,
   }) : super(key: key);
 
   final bool stopEvent;
@@ -68,16 +68,16 @@ class WeuiLoadingIcon extends StatefulWidget {
 
 class WeuiLoadingIconState extends State<WeuiLoadingIcon>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _doubleAnimation;
+  AnimationController? _controller ;
+  Animation<double>? _doubleAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = new AnimationController(
+    _controller = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000))
       ..repeat();
-    _doubleAnimation = Tween(begin: 0.0, end: 360.0).animate(_controller)
+    _doubleAnimation = Tween(begin: 0.0, end: 360.0).animate(_controller!)
       ..addListener(() {
         setState(() {});
       });
@@ -86,14 +86,14 @@ class WeuiLoadingIconState extends State<WeuiLoadingIcon>
   @override
   void dispose() {
     // TODO: implement dispose
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
-        angle: _doubleAnimation.value ~/ 30 * 30.0 * 0.0174533,
+        angle: _doubleAnimation!.value ~/ 30 * 30.0 * 0.0174533,
         child: Image.asset("assets/images/loading.png",
             package: "cool_ui", width: widget.size, height: widget.size));
   }
@@ -115,7 +115,7 @@ class WeuiToastConfigData{
         this.loadingBackButtonClose = false,
         this.toastAlignment = const Alignment(0.0, -0.2)});
 
-  copyWith({String successText,Duration successDuration,String loadingText,Alignment toastAlignment}){
+  copyWith({String? successText, Duration? successDuration, String? loadingText, Alignment? toastAlignment}){
     return WeuiToastConfigData(
       successText: successText ?? this.successText,
       successDuration: successDuration ?? this.successDuration,
@@ -126,8 +126,8 @@ class WeuiToastConfigData{
 }
 
 class WeuiToastConfig extends InheritedWidget{
-  final WeuiToastConfigData data;
-  WeuiToastConfig({Widget child,this.data}): super(child:child);
+  final WeuiToastConfigData? data;
+  WeuiToastConfig({required Widget child,this.data}): super(child:child);
 
   @override
   bool updateShouldNotify(WeuiToastConfig oldWidget) {
@@ -137,21 +137,21 @@ class WeuiToastConfig extends InheritedWidget{
 
   
   static WeuiToastConfigData of(BuildContext context) {
-    var widget = context.inheritFromWidgetOfExactType(WeuiToastConfig);
+    var widget = context.dependOnInheritedWidgetOfExactType<WeuiToastConfig>();
     if(widget is WeuiToastConfig){
-      return widget.data;
+      return widget.data ?? WeuiToastConfigData();
     }
     return WeuiToastConfigData();
   }
 }
 
 Future showWeuiSuccessToast(
-    {@required BuildContext context,
-    Widget message,
+    {required BuildContext context,
+    Widget? message,
     stopEvent = false,
-    bool backButtonClose,
-    Alignment alignment,
-    Duration closeDuration}) {
+    bool? backButtonClose,
+    Alignment? alignment,
+    Duration? closeDuration}) {
       
   var config = WeuiToastConfig.of(context);
   message = message?? Text(config.successText);
@@ -171,11 +171,11 @@ Future showWeuiSuccessToast(
 }
 
 HideCallback showWeuiLoadingToast(
-    {@required BuildContext context,
-    Widget message,
+    {required BuildContext context,
+    Widget? message,
     stopEvent = true,
-    bool backButtonClose,
-    Alignment alignment}) {
+    bool? backButtonClose,
+    Alignment? alignment}) {
   var config = WeuiToastConfig.of(context);
   message = message?? Text(config.loadingText);
   backButtonClose = backButtonClose ?? config.loadingBackButtonClose;
@@ -192,20 +192,19 @@ HideCallback showWeuiLoadingToast(
 int backButtonIndex = 2;
 
 HideCallback showWeuiToast(
-    {@required BuildContext context,
-    @required Widget message,
-    @required Widget icon,
+    {required BuildContext context,
+    required Widget message,
+    required Widget icon,
     bool stopEvent = false,
-    Alignment alignment,
-    bool backButtonClose}) {
+    Alignment? alignment,
+    bool backButtonClose = false}) {
   
   var config = WeuiToastConfig.of(context);
-  alignment = alignment?? config.toastAlignment;
+  alignment = alignment ?? config.toastAlignment;
 
   Completer<VoidCallback> result = Completer<VoidCallback>();
   var backButtonName = 'CoolUI_WeuiToast$backButtonIndex';
-  BackButtonInterceptor.add((stopDefaultButtonEvent){
-    print(backButtonClose);
+  BackButtonInterceptor.add((stopDefaultButtonEvent, routeInfo){
     if(backButtonClose){
       result.future.then((hide){
         hide();
@@ -215,7 +214,7 @@ HideCallback showWeuiToast(
   }, zIndex: backButtonIndex, name: backButtonName);
   backButtonIndex++;
 
-  var overlay = OverlayEntry(
+  OverlayEntry? overlay = OverlayEntry(
     maintainState: true,
       builder: (_) => WillPopScope(
         onWillPop: () async {
@@ -224,7 +223,7 @@ HideCallback showWeuiToast(
           return false;
         },
         child: WeuiToastWidget(
-            alignment: alignment,
+            alignment: alignment!,
             icon: icon,
             message: message,
             stopEvent: stopEvent,
@@ -234,11 +233,11 @@ HideCallback showWeuiToast(
     if(overlay == null){
       return;
     }
-    overlay.remove();
+    overlay!.remove();
     overlay = null;
     BackButtonInterceptor.removeByName(backButtonName);
   });
-  Overlay.of(context).insert(overlay);
+  Overlay.of(context)!.insert(overlay!);
 
 
   return () async {
