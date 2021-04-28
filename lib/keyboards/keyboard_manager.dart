@@ -31,104 +31,109 @@ class CoolKeyboard {
     if (isInterceptor) return;
     isInterceptor = true;
     ServicesBinding.instance!.defaultBinaryMessenger
-        .setMockMessageHandler("flutter/textinput", (ByteData? data) async {
-      var methodCall = _codec.decodeMethodCall(data);
-      switch (methodCall.method) {
-        case 'TextInput.show':
-          if (_currentKeyboard != null) {
-            if (clearTask != null) {
-              clearTask!.cancel();
-              clearTask = null;
-            }
-            openKeyboard();
-            return _codec.encodeSuccessEnvelope(null);
-          } else {
-            if (data !=  null) {
-              return await _sendPlatformMessage("flutter/textinput", data);
-            }
+        .setMockMessageHandler("flutter/textinput", _textInputHanlde);
+  }
+
+  static Future<ByteData?> _textInputHanlde(ByteData? data) async {
+    var methodCall = _codec.decodeMethodCall(data);
+    switch (methodCall.method) {
+      case 'TextInput.show':
+        if (_currentKeyboard != null) {
+          if (clearTask != null) {
+            clearTask!.cancel();
+            clearTask = null;
           }
-          break;
-        case 'TextInput.hide':
-          if (_currentKeyboard != null) {
-            if (clearTask == null) {
-              clearTask = new Timer(Duration(milliseconds: 16),
-                  () => hideKeyboard(animation: true));
-            }
-            return _codec.encodeSuccessEnvelope(null);
-          } else {
-            if (data !=  null) {
-              return await _sendPlatformMessage("flutter/textinput", data);
-            }
+          openKeyboard();
+          return _codec.encodeSuccessEnvelope(null);
+        } else {
+          if (data != null) {
+            return await _sendPlatformMessage("flutter/textinput", data);
           }
-          break;
-        case 'TextInput.setEditingState':
-          var editingState = TextEditingValue.fromJSON(methodCall.arguments);
-          if (_keyboardController != null) {
-            _keyboardController!.value = editingState;
-            return _codec.encodeSuccessEnvelope(null);
-          }
-          break;
-        case 'TextInput.clearClient':
+        }
+        break;
+      case 'TextInput.hide':
+        if (_currentKeyboard != null) {
           if (clearTask == null) {
             clearTask = new Timer(Duration(milliseconds: 16),
                 () => hideKeyboard(animation: true));
           }
-          clearKeyboard();
-          break;
-        case 'TextInput.setClient':
-          var setInputType = methodCall.arguments[1]['inputType'];
-          InputClient? client;
-          _keyboards.forEach((inputType, keyboardConfig) {
-            if (inputType.name == setInputType['name']) {
-              client = InputClient.fromJSON(methodCall.arguments);
-
-              _keyboardParam =
-                  (client!.configuration.inputType as CKTextInputType).params;
-
-              clearKeyboard();
-              _currentKeyboard = keyboardConfig;
-              _keyboardController = KeyboardController(client: client!)
-                ..addListener(() {
-                  var callbackMethodCall = MethodCall(
-                      "TextInputClient.updateEditingState", [
-                    _keyboardController!.client.connectionId,
-                    _keyboardController!.value.toJSON()
-                  ]);
-                  ServicesBinding.instance!.defaultBinaryMessenger
-                      .handlePlatformMessage(
-                          "flutter/textinput",
-                          _codec.encodeMethodCall(callbackMethodCall),
-                          (data) {});
-                });
-              if (_pageKey != null) {
-                _pageKey!.currentState?.update();
-              }
-            }
-          });
-
-          if (client != null) {
-            await _sendPlatformMessage("flutter/textinput",
-                _codec.encodeMethodCall(MethodCall('TextInput.hide')));
-            return _codec.encodeSuccessEnvelope(null);
-          } else {
-            if (clearTask == null) {
-              hideKeyboard(animation: false);
-            }
-            clearKeyboard();
+          return _codec.encodeSuccessEnvelope(null);
+        } else {
+          if (data != null) {
+            return await _sendPlatformMessage("flutter/textinput", data);
           }
-          break;
-      }
-      if (data != null) {
-        ByteData response = await _sendPlatformMessage("flutter/textinput", data);
-        return response;
-      }
-      return null;
-    });
+        }
+        break;
+      case 'TextInput.setEditingState':
+        var editingState = TextEditingValue.fromJSON(methodCall.arguments);
+        if (_keyboardController != null) {
+          _keyboardController!.value = editingState;
+          return _codec.encodeSuccessEnvelope(null);
+        }
+        break;
+      case 'TextInput.clearClient':
+        var isShow = _currentKeyboard != null;
+        if (clearTask == null) {
+          clearTask = new Timer(
+              Duration(milliseconds: 16), () => hideKeyboard(animation: true));
+        }
+        clearKeyboard();
+        if (isShow) {
+          return _codec.encodeSuccessEnvelope(null);
+        }
+        break;
+      case 'TextInput.setClient':
+        var setInputType = methodCall.arguments[1]['inputType'];
+        InputClient? client;
+        _keyboards.forEach((inputType, keyboardConfig) {
+          if (inputType.name == setInputType['name']) {
+            client = InputClient.fromJSON(methodCall.arguments);
+
+            _keyboardParam =
+                (client!.configuration.inputType as CKTextInputType).params;
+
+            clearKeyboard();
+            _currentKeyboard = keyboardConfig;
+            _keyboardController = KeyboardController(client: client!)
+              ..addListener(() {
+                var callbackMethodCall = MethodCall(
+                    "TextInputClient.updateEditingState", [
+                  _keyboardController!.client.connectionId,
+                  _keyboardController!.value.toJSON()
+                ]);
+                ServicesBinding.instance!.defaultBinaryMessenger
+                    .handlePlatformMessage("flutter/textinput",
+                        _codec.encodeMethodCall(callbackMethodCall), (data) {});
+              });
+            if (_pageKey != null) {
+              _pageKey!.currentState?.update();
+            }
+          }
+        });
+
+        if (client != null) {
+          await _sendPlatformMessage("flutter/textinput",
+              _codec.encodeMethodCall(MethodCall('TextInput.hide')));
+          return _codec.encodeSuccessEnvelope(null);
+        } else {
+          if (clearTask == null) {
+            hideKeyboard(animation: false);
+          }
+          clearKeyboard();
+        }
+      // break;
+    }
+    if (data != null) {
+      ByteData? response =
+          await _sendPlatformMessage("flutter/textinput", data);
+      return response;
+    }
+    return null;
   }
 
-  static Future<ByteData> _sendPlatformMessage(
+  static Future<ByteData?> _sendPlatformMessage(
       String channel, ByteData message) {
-    final Completer<ByteData> completer = Completer<ByteData>();
+    final Completer<ByteData?> completer = Completer<ByteData?>();
     ui.window.sendPlatformMessage(channel, message, (ByteData? reply) {
       try {
         completer.complete(reply);
@@ -161,12 +166,12 @@ class CoolKeyboard {
 
     var tempKey = _pageKey;
     _root!.setKeyboard((ctx) {
-      if (_currentKeyboard != null && _keyboardHeightNotifier.value != null) {
+      if (_currentKeyboard != null && _keyboardHeightNotifier.value != 0) {
         return KeyboardPage(
             key: tempKey,
             builder: (ctx) {
-              return _currentKeyboard!.builder(
-                  ctx, _keyboardController!, _keyboardParam);
+              return _currentKeyboard!
+                  .builder(ctx, _keyboardController!, _keyboardParam);
             },
             height: _keyboardHeightNotifier.value);
       } else {
@@ -174,7 +179,7 @@ class CoolKeyboard {
       }
     });
 
-    BackButtonInterceptor.add((_, _2) {
+    BackButtonInterceptor.add((_, __) {
       CoolKeyboard.sendPerformAction(TextInputAction.done);
       return true;
     }, zIndex: 1, name: 'CustomKeyboard');
@@ -229,8 +234,10 @@ class CoolKeyboard {
   static sendPerformAction(TextInputAction action) {
     var callbackMethodCall = MethodCall("TextInputClient.performAction",
         [_keyboardController!.client.connectionId, action.toString()]);
-    ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage("flutter/textinput",
-        _codec.encodeMethodCall(callbackMethodCall), (data) {});
+    ServicesBinding.instance!.defaultBinaryMessenger.handlePlatformMessage(
+        "flutter/textinput",
+        _codec.encodeMethodCall(callbackMethodCall),
+        (data) {});
   }
 
   static updateKeyboardHeight() {
@@ -245,13 +252,13 @@ class CoolKeyboard {
 class KeyboardConfig {
   final KeyboardBuilder builder;
   final GetKeyboardHeight getHeight;
-  const KeyboardConfig({required this.builder,required this.getHeight});
+  const KeyboardConfig({required this.builder, required this.getHeight});
 }
 
 class InputClient {
   final int connectionId;
   final TextInputConfiguration configuration;
-  const InputClient({required this.connectionId,required this.configuration});
+  const InputClient({required this.connectionId, required this.configuration});
 
   factory InputClient.fromJSON(List<dynamic> encoded) {
     return InputClient(
@@ -331,7 +338,8 @@ class CKTextInputType extends TextInputType {
   final String name;
   final String? params;
 
-  const CKTextInputType({required this.name, bool? signed, bool? decimal, this.params})
+  const CKTextInputType(
+      {required this.name, bool? signed, bool? decimal, this.params})
       : super.numberWithOptions(signed: signed, decimal: decimal);
 
   @override
@@ -376,7 +384,8 @@ class CKTextInputType extends TextInputType {
 class KeyboardPage extends StatefulWidget {
   final WidgetBuilder builder;
   final double height;
-  const KeyboardPage({required this.builder, this.height = 0, Key? key}) : super(key: key);
+  const KeyboardPage({required this.builder, this.height = 0, Key? key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => KeyboardPageState();
