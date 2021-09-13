@@ -12,7 +12,7 @@ import 'keyboards/test_keyboard.dart';
 void main() {
   NumberKeyboard.register();
   TestKeyboard.register();
-  runApp(KeyboardRootWidget(child: MyApp()));
+  runMockApp(KeyboardRootWidget(child: MyApp()));
   // runApp(MyApp());
 }
 

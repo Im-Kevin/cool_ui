@@ -1,3 +1,6 @@
+## [1.1.0]
+* TODO: 修复了flutter2.5后删除了setMockMessageHandler导致无法使用的问题
+
 ## [1.0.2]
 * TODO: 修复收起虚拟键盘报错
 * TODO: 修复因空安全导致的报错

@@ -4,6 +4,16 @@
 
 <img width="38%" height="38%" src="./images/custom_keyboard.gif"/>
 
+## Flutter 2.5后添加的步骤
+替换runApp为runMockApp
+```dart
+void main() {
+  // runApp(MyApp()); // 旧的
+  runMockApp(KeyboardRootWidget(child: MyApp())); // 新的
+}
+```
+
+
 ## Step1
 编写个性化的键盘
 

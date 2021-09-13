@@ -7,6 +7,7 @@ import 'dart:core';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/rendering.dart';
 
@@ -23,6 +24,8 @@ part 'widgets/utils/paint_event.dart';
 
 part 'dialogs/weui_toast.dart';
 
+part 'keyboards/mocks/mock_binding.dart';
+part 'keyboards/mocks/mock_binary_messenger.dart';
 part 'keyboards/keyboard_manager.dart';
 part 'keyboards/number_keyboard.dart';
 part 'keyboards/keyboard_controller.dart';

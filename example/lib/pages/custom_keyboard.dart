@@ -34,7 +34,7 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo> {
                 keyboardType: TextInputType.text,
               ),
               Container(
-                height: 300.0,
+                height: 300,
               ),
               FlatButton(
                 child: Text('弹出功能演示'),
@@ -52,7 +52,7 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo> {
               ),
               TextField(
                 decoration: InputDecoration(labelText: '多个键盘演示'),
-                keyboardType: NumberKeyboard.inputType,
+                keyboardType: NumberKeyboard.inputType, 
               )
             ],
           ));

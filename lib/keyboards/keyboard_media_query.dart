@@ -41,8 +41,12 @@ class KeyboardMediaQueryState extends State<KeyboardMediaQuery >{
   }
 
   onUpdateHeight(){
-    WidgetsBinding.instance!.addPostFrameCallback((_){
+    SchedulerBinding.instance!.addPostFrameCallback((_){
       setState(()=>{});
+      SchedulerBinding.instance!.addPostFrameCallback((_){
+        WidgetsBinding.instance!.handleMetricsChanged();
+      });
+
     });
   }
 
