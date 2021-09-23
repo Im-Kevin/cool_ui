@@ -112,3 +112,7 @@ TextField(
 ### sendPerformAction(TextInputAction action)
 ///发送其他Action
 
+
+## 特别问题讲解:
+1. 报错: CoolKeyboard can only be used in MockBinding<br/>
+答: 可能是因为调用了WidgetsFlutterBinding.ensureInitialized()导致的,请将WidgetsFlutterBinding.ensureInitialized() 替换成 MockBinding.ensureInitialized()
