@@ -10,7 +10,14 @@ import 'package:flutter/material.dart';
 import 'keyboards/test_keyboard.dart';
 
 void main() {
-  NumberKeyboard.register();
+  NumberKeyboard.register(
+    // backIcon: Container(
+    //   color: Colors.red,
+    // ),
+    // clearIcon: Container(
+    //   color: Colors.blue,
+    // ),
+  );
   TestKeyboard.register();
   runMockApp(KeyboardRootWidget(child: MyApp()));
   // runApp(MyApp());
@@ -118,8 +125,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text("TableEvent"),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => TableDemo()));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => TableDemo()));
               },
             )
           ],

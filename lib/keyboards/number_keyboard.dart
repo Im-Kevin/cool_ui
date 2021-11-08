@@ -7,12 +7,22 @@ class NumberKeyboard extends StatelessWidget{
     return mediaQuery.size.width / 3 / 2 * 4;
   }
   final KeyboardController controller ;
-  const NumberKeyboard({required this.controller});
+  static Widget? _backIcon;
+  static Widget? _clearIcon;
+  const NumberKeyboard({required this.controller,});
 
-  static register(){
+  static register({Widget? backIcon,Widget? clearIcon}){
+    if(backIcon !=null){
+      _backIcon=backIcon;
+    }
+    if(clearIcon !=null){
+      _clearIcon=clearIcon;
+    }
     CoolKeyboard.addKeyboard(NumberKeyboard.inputType,KeyboardConfig(builder: (context,controller, params){
       return NumberKeyboard(controller: controller);
-    },getHeight: NumberKeyboard.getHeight));
+    },getHeight: NumberKeyboard.getHeight,
+
+    ));
   }
 
 
@@ -42,11 +52,11 @@ class NumberKeyboard extends StatelessWidget{
               buildButton('7'),
               buildButton('8'),
               buildButton('9'),
-              Container(
+             Container(
                 color: Color(0xFFd3d6dd),
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  child: Center(child: Icon(Icons.expand_more),),
+                  child:  _backIcon !=null? _backIcon! :Center(child: Icon(Icons.expand_more),),
                   onTap: (){
                     controller.doneAction();
                   },
@@ -57,7 +67,7 @@ class NumberKeyboard extends StatelessWidget{
                 color: Color(0xFFd3d6dd),
                 child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  child: Center(child: Text('X'),),
+                  child: _clearIcon !=null?  _clearIcon:Center(child: Text('X'),),
                   onTap: (){
                     controller.deleteOne();
                   },
