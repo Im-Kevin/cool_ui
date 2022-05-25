@@ -1,3 +1,6 @@
+## [1.2.0]
+* TODO: 修复了flutter3.0后WidgetsBinding.instance无法判断是否为空导致报错
+
 ## [1.1.0]
 * TODO: 修复了flutter2.5后删除了setMockMessageHandler导致无法使用的问题
 

@@ -1,6 +1,6 @@
 name: cool_ui
 description: Some practical Widget for flutter,Popover,Weui,Custom Keyboard
-version: 1.1.0
+version: 1.2.0
 author: Kevin <liangkaikevin@gmail.com>
 homepage: https://github.com/Im-Kevin/cool_ui
 
@@ -9,7 +9,7 @@ environment:
   flutter: ">=2.5.0 <3.0.0"
 
 dependencies:
-  back_button_interceptor: 5.0.0
+  back_button_interceptor: 6.0.0
   flutter:
     sdk: flutter
 

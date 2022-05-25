@@ -1,26 +1,31 @@
 part of cool_ui;
 
-
-
 class MockBinding extends WidgetsFlutterBinding {
+  static bool _initFlag = false;
+
   @override
   void initInstances() {
     // TODO: implement initInstances
     super.initInstances();
-    _binaryMessenger  = MockBinaryMessenger(super.defaultBinaryMessenger);
+    _binaryMessenger = MockBinaryMessenger(super.defaultBinaryMessenger);
+    _initFlag = true;
   }
 
-  
   static WidgetsBinding ensureInitialized() {
-    if (WidgetsBinding.instance == null)
+    if (!_initFlag) {
       MockBinding();
-    return WidgetsBinding.instance!;
+      _initFlag = true;
+    }
+    // if (WidgetsBinding.instance == null) MockBinding();
+    return WidgetsBinding.instance;
   }
 
   MockBinaryMessenger? _binaryMessenger;
   @override
   BinaryMessenger get defaultBinaryMessenger {
-    return _binaryMessenger != null ? _binaryMessenger! : super.defaultBinaryMessenger;
+    return _binaryMessenger != null
+        ? _binaryMessenger!
+        : super.defaultBinaryMessenger;
   }
 }
 

@@ -118,8 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text("TableEvent"),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => TableDemo()));
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => TableDemo()));
               },
             )
           ],
