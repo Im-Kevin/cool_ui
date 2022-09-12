@@ -36,13 +36,13 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo> {
               Container(
                 height: 300,
               ),
-              FlatButton(
+              MaterialButton(
                 child: Text('弹出功能演示'),
-                onPressed: (){
+                onPressed: () {
                   showInputDialogs(
-                    context: context,messageWidget: Text('弹出输入功能演示'),
-                    keyboardType: NumberKeyboard.inputType
-                  );
+                      context: context,
+                      messageWidget: Text('弹出输入功能演示'),
+                      keyboardType: NumberKeyboard.inputType);
                 },
               ),
               TextField(
@@ -52,7 +52,7 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo> {
               ),
               TextField(
                 decoration: InputDecoration(labelText: '多个键盘演示'),
-                keyboardType: NumberKeyboard.inputType, 
+                keyboardType: NumberKeyboard.inputType,
               )
             ],
           ));
@@ -78,48 +78,50 @@ class CustomKeyboardDemoState extends State<CustomKeyboardDemo> {
               child: Container(
                   padding: EdgeInsets.only(top: 10),
                   child: Material(
-                      child: Column(children: <Widget>[
-                        TextField(
-                    inputFormatters: inputFormatters,
-                    keyboardType: keyboardType,
-                    autofocus: true,
-                    onChanged: (newValue) {
-                      value = newValue;
-                    },
-                  ),
-                  TextField(
-                    inputFormatters: inputFormatters,
-                    keyboardType: TextInputType.text,
-                    onChanged: (newValue) {
-                      value = newValue;
-                    },
-                  ),
-                  TextField(
-                    inputFormatters: inputFormatters,
-                    keyboardType: keyboardType,
-                    onChanged: (newValue) {
-                      value = newValue;
-                    },
-                  )
-                      ],)))));
+                      child: Column(
+                    children: <Widget>[
+                      TextField(
+                        inputFormatters: inputFormatters,
+                        keyboardType: keyboardType,
+                        autofocus: true,
+                        onChanged: (newValue) {
+                          value = newValue;
+                        },
+                      ),
+                      TextField(
+                        inputFormatters: inputFormatters,
+                        keyboardType: TextInputType.text,
+                        onChanged: (newValue) {
+                          value = newValue;
+                        },
+                      ),
+                      TextField(
+                        inputFormatters: inputFormatters,
+                        keyboardType: keyboardType,
+                        onChanged: (newValue) {
+                          value = newValue;
+                        },
+                      )
+                    ],
+                  )))));
           return CupertinoAlertDialog(
-                title: titleWidget,
-                content: Column(
-                  children: children,
-                ),
-                actions: <Widget>[
-                  CupertinoDialogAction(
-                    child: Text("取消"),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                  CupertinoDialogAction(
-                    child: Text("確認"),
-                    onPressed: () {
-                      Navigator.of(context).pop(value ?? '');
-                    },
-                  )
-                ],
-              );
+            title: titleWidget,
+            content: Column(
+              children: children,
+            ),
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text("取消"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              CupertinoDialogAction(
+                child: Text("確認"),
+                onPressed: () {
+                  Navigator.of(context).pop(value ?? '');
+                },
+              )
+            ],
+          );
         });
   }
 }
