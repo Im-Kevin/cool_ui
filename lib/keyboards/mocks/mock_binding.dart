@@ -34,7 +34,8 @@ class MockBinding extends WidgetsFlutterBinding {
 }
 
 runMockApp(Widget app) {
-  MockBinding.ensureInitialized()
-    ..scheduleAttachRootWidget(app)
+  final binding = MockBinding.ensureInitialized();
+  binding
+    ..scheduleAttachRootWidget(binding.wrapWithDefaultView(app))
     ..scheduleWarmUpFrame();
 }
